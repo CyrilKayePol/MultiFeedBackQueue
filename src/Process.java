@@ -1,6 +1,6 @@
 public class Process implements Comparable<Process> {
 	private int arrivalTime, burstTime, priority, processID;
-	
+	private int preemptedCount = 0;
 	public Process(int pID, int arrive, int burst, int prio){
 		
 		processID = pID;
@@ -29,7 +29,14 @@ public class Process implements Comparable<Process> {
 	public int getPriorityNum(){
 		return priority;
 	}
-
+	
+	public int getPreemptedCount() {
+		return preemptedCount;
+	}
+	
+	public void setPreemtedCount(int count) {
+		this.preemptedCount +=count;
+	}
 	public int compareTo(Process o) {
 		return this.getArrivalTime() - o.getArrivalTime();
 	}

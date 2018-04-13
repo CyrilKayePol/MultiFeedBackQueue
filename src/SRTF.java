@@ -80,9 +80,14 @@ public class SRTF extends SchedulingAlgorithm {
 	}
 	public void execute() {
 		boolean continueExecution = true;
+		Process proc = null;
 		while(!arrivalQueue.isEmpty()) {
 			continueExecution = true;
-			Process proc = arrivalQueue.get(0);
+			if((proc != arrivalQueue.get(0)) && (proc != null) && proc.getBurstTime() != 0) {
+				proc.setPreemtedCount(1);
+				updateProcess(proc);
+			}
+			proc = arrivalQueue.get(0);
 			gantProcess.add("P"+proc.getProcessID());
 			gantLine.add(burstTimeTotal+"");
 			int length = proc.getBurstTime();
@@ -120,6 +125,13 @@ public class SRTF extends SchedulingAlgorithm {
 		}
 	}
 	
+	public void printExecutionHistory() {
+		System.out.println();
+		for(int a = 0;a<process.length;a++) {
+			System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
+		}
+	}
+	
 	public static void main(String[] args) {
 		Process p[] = new Process[2];
 		int arrival[] = {0,2};
@@ -127,10 +139,11 @@ public class SRTF extends SchedulingAlgorithm {
 		for(int a = 0;a<p.length;a++) {
 			p[a] = new Process(a, arrival[a], burst[a], 0);
 		}
-		SRTF sjf = new SRTF(p);
-		sjf.seedArrivalQueue();
-		sjf.execute();
-		sjf.printGant();
+		SRTF srtf = new SRTF(p);
+		srtf.seedArrivalQueue();
+		srtf.execute();
+		srtf.printGant();
+		srtf.printExecutionHistory();
 	}
 
 }

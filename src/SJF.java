@@ -74,9 +74,14 @@ public class SJF extends SchedulingAlgorithm {
 		}
 	}
 	public void execute() {
+		Process proc = null;
 		while(!arrivalQueue.isEmpty()) {
 			sortArrivalQueue();
-			Process proc = arrivalQueue.get(0);
+			if((proc != arrivalQueue.get(0)) && (proc != null) && proc.getBurstTime() != 0) {
+				proc.setPreemtedCount(1);
+				updateProcess(proc);
+			}
+			proc = arrivalQueue.get(0);
 			arrivalQueue.remove(proc);
 			gantProcess.add("P"+proc.getProcessID());
 			gantLine.add(burstTimeTotal+"");
@@ -106,6 +111,13 @@ public class SJF extends SchedulingAlgorithm {
 		}
 	}
 	
+	public void printExecutionHistory() {
+		System.out.println();
+		for(int a = 0;a<process.length;a++) {
+			System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
+		}
+	}
+	
 	public static void main(String[] args) {
 		Process p[] = new Process[10];
 		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
@@ -116,7 +128,8 @@ public class SJF extends SchedulingAlgorithm {
 		SJF sjf = new SJF(p);
 		sjf.seedArrivalQueue();
 		sjf.execute();
-		//sjf.printGant();
+		sjf.printGant();
+		sjf.printExecutionHistory();
 	}
 
 }
