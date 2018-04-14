@@ -121,7 +121,7 @@ public class SJF extends SchedulingAlgorithm {
 	public static void main(String[] args) {
 		Process p[] = new Process[10];
 		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
-		int burst[] = {6,8,7,3,6,6,3,2,2,9};
+		int burst[] =   {4,8,2,3,2,6,7,2,2,9};
 		for(int a = 0;a<p.length;a++) {
 			p[a] = new Process(a, arrival[a], burst[a], 0);
 		}

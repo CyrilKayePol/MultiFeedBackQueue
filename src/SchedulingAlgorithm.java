@@ -12,6 +12,8 @@ public abstract class SchedulingAlgorithm  {
 		Arrays.sort(processes);
 	}
 	
+	public SchedulingAlgorithm() {}
+	
 	public void schedule(){}
 	
 	public int getTotalBurstTime() {
@@ -23,6 +25,7 @@ public abstract class SchedulingAlgorithm  {
 		return total;
 	}
 	
+
 	/*
 	public float computeAvgTurnaroundTime(){
 		

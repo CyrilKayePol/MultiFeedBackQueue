@@ -2,16 +2,16 @@ import java.util.ArrayList;
 
 public class SRTF extends SchedulingAlgorithm {
 	private ArrayList<Process> arrivalQueue;
-	private int burstTimeTotal;
 	private Process[] process;
 	private ArrayList<String> gantProcess = new ArrayList<String>();
 	private ArrayList<String> gantLine = new ArrayList<String>();
+	private ArrayList<Process> preempted = new ArrayList<Process>();
 	
 	public SRTF(Process[] process) {
 		super(process);
 		this.process = process;
 		arrivalQueue = new ArrayList<Process>();
-		burstTimeTotal = process[0].getArrivalTime();
+		MLFQ.currentBurstTime = process[0].getArrivalTime();
 		
 	}
 	
@@ -81,22 +81,20 @@ public class SRTF extends SchedulingAlgorithm {
 	public void execute() {
 		boolean continueExecution = true;
 		Process proc = null;
+		sortArrivalQueue(proc);
 		while(!arrivalQueue.isEmpty()) {
 			continueExecution = true;
-			if((proc != arrivalQueue.get(0)) && (proc != null) && proc.getBurstTime() != 0) {
-				proc.setPreemtedCount(1);
-				updateProcess(proc);
-			}
 			proc = arrivalQueue.get(0);
 			gantProcess.add("P"+proc.getProcessID());
-			gantLine.add(burstTimeTotal+"");
+			gantLine.add(MLFQ.currentBurstTime+"");
 			int length = proc.getBurstTime();
 			for(int a = 0;a<length;a++) {
 				if(continueExecution) {
-					burstTimeTotal +=1;
+					MLFQ.currentBurstTime +=1;
+					//System.out.println("burst in srtf = "+MLFQ.currentBurstTime);
 					proc.setBurstTime(1);
 					updateProcess(proc);
-					addNewlyArrivedProcess(burstTimeTotal);
+					addNewlyArrivedProcess(MLFQ.currentBurstTime);
 					continueExecution = sortArrivalQueue(proc);
 					gantProcess.add(" ");
 					gantLine.add("-");
@@ -105,14 +103,22 @@ public class SRTF extends SchedulingAlgorithm {
 						arrivalQueue.remove(proc);
 					}
 				}else {
+					proc.setPreemtedCount(1);
+					updateProcess(proc);
+					preempted.add(proc);
+					arrivalQueue.remove(proc);
 					break;
 				}
 			}
 			
 			
 		}
-		gantLine.add(burstTimeTotal+"");
+		gantLine.add(MLFQ.currentBurstTime+"");
 		
+	}
+	
+	public ArrayList<Process> getPreemptedProcesses(){
+		return preempted;
 	}
 	
 	public void printGant() {
@@ -133,9 +139,9 @@ public class SRTF extends SchedulingAlgorithm {
 	}
 	
 	public static void main(String[] args) {
-		Process p[] = new Process[2];
-		int arrival[] = {0,2};
-		int burst[] = {9,2};
+		Process p[] = new Process[10];
+		int arrival[] = {0,0,0,0,0,0,0,0,0,0};
+		int burst[] =   {4,8,2,3,2,6,7,2,2,9};
 		for(int a = 0;a<p.length;a++) {
 			p[a] = new Process(a, arrival[a], burst[a], 0);
 		}
