@@ -1,13 +1,14 @@
+package schedulingAlgo;
 import java.util.ArrayList;
 
-public class SJF extends SchedulingAlgorithm {
+public class SRTF extends SchedulingAlgorithm {
 	private ArrayList<Process> arrivalQueue;
 	private int burstTimeTotal;
 	private Process[] process;
 	private ArrayList<String> gantProcess = new ArrayList<String>();
 	private ArrayList<String> gantLine = new ArrayList<String>();
 	
-	public SJF(Process[] process) {
+	public SRTF(Process[] process) {
 		super(process);
 		this.process = process;
 		arrivalQueue = new ArrayList<Process>();
@@ -25,7 +26,7 @@ public class SJF extends SchedulingAlgorithm {
 		}
 	}
 	
-	public void sortArrivalQueue() {
+	public boolean sortArrivalQueue(Process current) {
 		Process temp;
 		for(int b = 0;b<arrivalQueue.size();b++) {
 			for(int a = b+1;a<arrivalQueue.size();a++) {
@@ -55,6 +56,11 @@ public class SJF extends SchedulingAlgorithm {
 			}
 		}
 		
+		if(current == arrivalQueue.get(0)) {
+			return true;
+		}
+		return false;
+		
 	}
 	
 	public void addNewlyArrivedProcess(int time) {
@@ -74,25 +80,34 @@ public class SJF extends SchedulingAlgorithm {
 		}
 	}
 	public void execute() {
+		boolean continueExecution = true;
 		Process proc = null;
 		while(!arrivalQueue.isEmpty()) {
-			sortArrivalQueue();
+			continueExecution = true;
 			if((proc != arrivalQueue.get(0)) && (proc != null) && proc.getBurstTime() != 0) {
 				proc.setPreemtedCount(1);
 				updateProcess(proc);
 			}
 			proc = arrivalQueue.get(0);
-			arrivalQueue.remove(proc);
 			gantProcess.add("P"+proc.getProcessID());
 			gantLine.add(burstTimeTotal+"");
 			int length = proc.getBurstTime();
 			for(int a = 0;a<length;a++) {
-				burstTimeTotal +=1;
-				proc.setBurstTime(1);
-				updateProcess(proc);
-				addNewlyArrivedProcess(burstTimeTotal);
-				gantProcess.add(" ");
-				gantLine.add("-");
+				if(continueExecution) {
+					burstTimeTotal +=1;
+					proc.setBurstTime(1);
+					updateProcess(proc);
+					addNewlyArrivedProcess(burstTimeTotal);
+					continueExecution = sortArrivalQueue(proc);
+					gantProcess.add(" ");
+					gantLine.add("-");
+					
+					if(proc.getBurstTime() == 0) {
+						arrivalQueue.remove(proc);
+					}
+				}else {
+					break;
+				}
 			}
 			
 			
@@ -119,17 +134,17 @@ public class SJF extends SchedulingAlgorithm {
 	}
 	
 	public static void main(String[] args) {
-		Process p[] = new Process[10];
-		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
-		int burst[] = {6,8,7,3,6,6,3,2,2,9};
+		Process p[] = new Process[2];
+		int arrival[] = {0,2};
+		int burst[] = {9,2};
 		for(int a = 0;a<p.length;a++) {
 			p[a] = new Process(a, arrival[a], burst[a], 0);
 		}
-		SJF sjf = new SJF(p);
-		sjf.seedArrivalQueue();
-		sjf.execute();
-		sjf.printGant();
-		sjf.printExecutionHistory();
+		SRTF srtf = new SRTF(p);
+		srtf.seedArrivalQueue();
+		srtf.execute();
+		srtf.printGant();
+		srtf.printExecutionHistory();
 	}
 
 }

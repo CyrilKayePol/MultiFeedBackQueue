@@ -2,3 +2,7 @@
 /PreemptPrio.class
 /ProcessExecutionHistory.class
 /RoundRobin.class
+/gui/
+/Main.class
+/SchedulingAlgorithms/
+/schedulingAlgo/

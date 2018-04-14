@@ -1,3 +1,4 @@
+package schedulingAlgo;
 import java.util.ArrayList;
 
 public class PreemptPrio extends SchedulingAlgorithm{

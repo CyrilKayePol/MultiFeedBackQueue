@@ -1,3 +1,4 @@
+package schedulingAlgo;
 public class Process implements Comparable<Process> {
 	private int arrivalTime, burstTime, priority, processID;
 	private int preemptedCount = 0;
