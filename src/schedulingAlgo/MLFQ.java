@@ -87,7 +87,7 @@ public class MLFQ extends SchedulingAlgorithm{
 	}
 	
 	private void q2execute() {
-		q2 = sjf(q2, LOWLEVEL);
+		q2 = srtf(q2, LOWLEVEL);
 		q3.addAll(preempted);
 		System.out.println("+++++++");
 	}
@@ -186,11 +186,8 @@ public class MLFQ extends SchedulingAlgorithm{
 					}
 				}else {
 					proc.setPreemtedCount(1);
-					proc.setArrivalTime(0);
 					updateProcess(proc);
 					System.out.println("[preempted "+proc.getProcessID()+" at time "+currentBurstTime+" remaining = "+proc.getBurstTime());
-					preempted.add(proc);
-					arrivalQueue.remove(proc);
 					break;
 				}
 			}
@@ -249,7 +246,7 @@ public class MLFQ extends SchedulingAlgorithm{
 	
 	public static void main(String[] args) {
 		Process p[] = new Process[10];
-		int arrival[] = {1,5,6,4,2,2,0,7,7,29};
+		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
 		int burst[] =   {4,8,2,3,2,6,7,2,2,9};
 		for(int a = 0;a<p.length;a++) {
 			p[a] = new Process(a, arrival[a], burst[a], 0);
