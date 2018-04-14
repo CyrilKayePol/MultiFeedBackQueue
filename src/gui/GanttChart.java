@@ -44,13 +44,29 @@ public class GanttChart extends JPanel implements Runnable{
 		threadedReadyQueue = new JPanel();
 		threadedReadyQueue.setLayout(null);
 		threadedReadyQueue.setPreferredSize(new Dimension(processQ.size()* 25, 100));
+		int id = -1;
 		for(int i = 0; i < processQ.size(); i++){
-			jobLabels[i] = new JLabel("P"+processQ.get(i).getProcessID(), JLabel.CENTER);
+			
+			if(id != processQ.get(i).getProcessID()) {
+				startX1 +=5;
+				id = processQ.get(i).getProcessID();
+			}
+			
+			if(i != processQ.size()-1) {
+				if(id != processQ.get(i+1).getProcessID()) {
+					jobLabels[i] = new JLabel("P"+processQ.get(i).getProcessID(), JLabel.CENTER);
+				}else {
+					jobLabels[i] = new JLabel();
+				}
+			}else {
+				jobLabels[i] = new JLabel("P"+processQ.get(i).getProcessID(), JLabel.CENTER);
+			}
+			
 			jobLabels[i].setBackground(Color.cyan);
 			jobLabels[i].setOpaque(true);
-			jobLabels[i].setBounds(startX1, 5, 20, 86);
+			jobLabels[i].setBounds(startX1, 5, 20, 65);
 			threadedReadyQueue.add(jobLabels[i]);
-			startX1 += 25;
+			startX1 += 20;
 		}
 	}
 	

@@ -80,7 +80,7 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 		
 		Process[] p1 = new Process[5];
 		for(int i = 0; i < 5; i++){
-			p1[i] = new Process(i+1, a[i], b[i], p[i]);
+			p1[i] = new Process(i, a[i], b[i], p[i]);
 		}
 		
 		new NoPreemptPrio(p1).schedule();
