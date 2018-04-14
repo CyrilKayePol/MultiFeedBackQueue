@@ -1,3 +1,4 @@
+package schedulingAlgo;
 import java.util.ArrayList;
 
 public class RoundRobin extends SchedulingAlgorithm{
@@ -81,6 +82,10 @@ public class RoundRobin extends SchedulingAlgorithm{
 		}
 		System.out.println(processQueue.size());
 		
+	}
+	
+	public ArrayList<Process> getProcessQueue(){
+		return processQueue;
 	}
 	
 	public static void main(String[] args){

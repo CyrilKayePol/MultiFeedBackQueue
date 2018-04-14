@@ -1,3 +1,4 @@
+package schedulingAlgo;
 import java.util.Arrays;
 
 
@@ -6,8 +7,8 @@ public abstract class SchedulingAlgorithm  {
 	protected Process[] processes;
 	protected float avgWaitingTime, avgTurnaroundTime, avgResponseTime;
 	
-	public SchedulingAlgorithm(Process[] process){
-		processes = process;
+	public SchedulingAlgorithm(Process[] p){
+		processes = p;
 		
 		Arrays.sort(processes);
 	}

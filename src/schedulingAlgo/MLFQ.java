@@ -1,4 +1,7 @@
+package schedulingAlgo;
+
 import java.util.ArrayList;
+
 
 public class MLFQ extends SchedulingAlgorithm{
 	private Process[] p;
