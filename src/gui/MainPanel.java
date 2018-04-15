@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
 
 import schedulingAlgo.Process;
 import schedulingAlgo.RoundRobin;
@@ -266,10 +267,12 @@ public class MainPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		Object obj = arg0.getSource();
 		if(obj == aboutMenu){
-			AboutPopup about = new AboutPopup();
+			AboutPopup about;
+			about = new AboutPopup();
 			about.setAlwaysOnTop(true);
 			about.setLocationRelativeTo(null);
 			about.setVisible(true);
+		
 		}
 		else if (obj == populate){
 			String numJob = numJobsfield.getText();
