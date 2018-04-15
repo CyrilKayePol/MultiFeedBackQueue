@@ -36,16 +36,4 @@ public class FCFS extends SchedulingAlgorithm{
 	public int[] getBurst(){
 		return bursts;
 	}
-	public static void main(String[] args) {
-		Process p[] = new Process[10];
-		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
-		int burst[] = {6,8,7,3,6,6,3,2,2,9};
-		for(int a = 0;a<p.length;a++) {
-			p[a] = new Process(a, arrival[a], burst[a], 0);
-		}
-		FCFS fcfs = new FCFS(p);
-		fcfs.execution();
-		fcfs.printGant();
-	}
-	
 }

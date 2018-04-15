@@ -111,7 +111,7 @@ public class SJF extends SchedulingAlgorithm {
 	}
 	public void printGant() {
 		for(int a = 0;a<gantProcess.size();a++) {
-			System.out.print(gantProcess.get(a));
+			System.out.print(gantProcess.get(a).getProcessID());
 		}
 		System.out.println();
 		for(int b = 0;b<gantLine.size();b++) {
@@ -124,19 +124,5 @@ public class SJF extends SchedulingAlgorithm {
 		for(int a = 0;a<process.length;a++) {
 			System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
 		}
-	}
-	
-	public static void main(String[] args) {
-		Process p[] = new Process[10];
-		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
-		int burst[] =   {4,8,2,3,2,6,7,2,2,9};
-		for(int a = 0;a<p.length;a++) {
-			p[a] = new Process(a, arrival[a], burst[a], 0);
-		}
-		SJF sjf = new SJF(p);
-		sjf.seedArrivalQueue();
-		sjf.execute();
-		sjf.printGant();
-		sjf.printExecutionHistory();
 	}
 }

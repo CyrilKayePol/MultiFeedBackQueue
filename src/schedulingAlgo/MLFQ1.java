@@ -345,14 +345,12 @@ public class MLFQ1 extends SchedulingAlgorithm{
 		for(int i = 0; i < temp.size(); i++){
 			if(temp.get(i).getBurstTime() <= timeQuantum){
 				for(int j = 0; j < temp.get(i).getBurstTime();j++){
-					System.out.println("I came here 1");
 					processExec.add("P"+temp.get(i).getProcessID());
 				}
 				temp.get(i).setBurstTime(temp.get(i).getBurstTime());
 			}
 			else{
 				for(int j = 0; j < timeQuantum;j++){
-					System.out.println("I came here 2");
 					processExec.add("P"+temp.get(i).getProcessID());
 				}
 				temp.get(i).setBurstTime(timeQuantum);
@@ -364,11 +362,33 @@ public class MLFQ1 extends SchedulingAlgorithm{
 	}
 	public void executeSRTF(int queueLevel){
 		if(queueLevel == 0){
-			
+			SRTF srtf = new SRTF(processes);
+			srtf.seedArrivalQueue();
+			processQueue = srtf.execute();
+			processExec = srtf.processExecution();
+			System.out.println("PQ "+processQueue.size());
 		}
 		else{
+			for(int i = 0; i < processQueue.size(); i++){
+				for(int j = 0; j < processQueue.size(); j++){
+					if(processQueue.get(i).getBurstTime() < processQueue.get(j).getBurstTime()){
+						Process p = processQueue.get(i);
+						processQueue.set(i, processQueue.get(j));
+						processQueue.set(j, p);
+					}
+				}
+			}
 			
+			for(int i = 0; i < processQueue.size(); i++){
+				int burst = processQueue.get(i).getBurstTime();
+				for(int j = 0; j < burst; j++){
+					processExec.add("P"+processQueue.get(i).getProcessID());
+				}
+				processQueue.get(i).setBurstTime(burst);
+			}
 		}
+		
+		printProcess();
 	}
 	public void printProcess(){
 		System.out.println("------> Executed! "+processExec.size());
@@ -396,14 +416,14 @@ public class MLFQ1 extends SchedulingAlgorithm{
 	}
 	public static void main(String[] args){
 		int[] a = {5,4,3,1,2,6, 1};
-		int[] b = {55,66,77,99,22,66, 14};
+		int[] b = {55,66,77,19,22,16, 14};
 		int[] p = {3,1,2, 8 , 0,1, 1};
 		
 		Process[] p1 = new Process[7];
 		for(int i = 0; i < 7; i++){
 			p1[i] = new Process(i, a[i], b[i], p[i]);
 		}
-		String[] algo = {"Round Robin", "Round Robin", "Preemptive Priority","FCFS", "Non-Preemptive Priority"};
+		String[] algo = {"Round Robin", "Round Robin","SRTF", "Preemptive Priority","FCFS", "Non-Preemptive Priority"};
 		new MLFQ1(algo, p1).execute();
 	}
 }

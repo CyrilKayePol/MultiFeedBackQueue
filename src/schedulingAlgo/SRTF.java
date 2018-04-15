@@ -5,8 +5,9 @@ public class SRTF extends SchedulingAlgorithm {
 	private ArrayList<Process> arrivalQueue;
 	private int burstTimeTotal;
 	private Process[] process;
-	private ArrayList<String> gantProcess = new ArrayList<String>();
+	private ArrayList<Process> gantProcess = new ArrayList<Process>();
 	private ArrayList<String> gantLine = new ArrayList<String>();
+	private ArrayList<String> processExec = new ArrayList<String>();
 	
 	public SRTF(Process[] process) {
 		super(process);
@@ -79,9 +80,10 @@ public class SRTF extends SchedulingAlgorithm {
 			}
 		}
 	}
-	public void execute() {
+	public ArrayList<Process> execute() {
 		boolean continueExecution = true;
 		Process proc = null;
+		sortArrivalQueue(null);
 		while(!arrivalQueue.isEmpty()) {
 			continueExecution = true;
 			if((proc != arrivalQueue.get(0)) && (proc != null) && proc.getBurstTime() != 0) {
@@ -89,17 +91,17 @@ public class SRTF extends SchedulingAlgorithm {
 				updateProcess(proc);
 			}
 			proc = arrivalQueue.get(0);
-			gantProcess.add("P"+proc.getProcessID());
+			gantProcess.add(proc);
 			gantLine.add(burstTimeTotal+"");
 			int length = proc.getBurstTime();
 			for(int a = 0;a<length;a++) {
 				if(continueExecution) {
 					burstTimeTotal +=1;
 					proc.setBurstTime(1);
+					processExec.add("P"+proc.getProcessID());
 					updateProcess(proc);
 					addNewlyArrivedProcess(burstTimeTotal);
 					continueExecution = sortArrivalQueue(proc);
-					gantProcess.add(" ");
 					gantLine.add("-");
 					
 					if(proc.getBurstTime() == 0) {
@@ -109,16 +111,17 @@ public class SRTF extends SchedulingAlgorithm {
 					break;
 				}
 			}
-			
-			
 		}
 		gantLine.add(burstTimeTotal+"");
-		
+		return gantProcess;
 	}
 	
+	public ArrayList<String> processExecution(){
+		return processExec;
+	}
 	public void printGant() {
 		for(int a = 0;a<gantProcess.size();a++) {
-			System.out.print(gantProcess.get(a));
+			System.out.print(gantProcess.get(a).getProcessID() + " ");
 		}
 		System.out.println();
 		for(int b = 0;b<gantLine.size();b++) {
@@ -132,19 +135,4 @@ public class SRTF extends SchedulingAlgorithm {
 			System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
 		}
 	}
-	
-	public static void main(String[] args) {
-		Process p[] = new Process[3];
-		int arrival[] = {0,2, 1};
-		int burst[] = {9,2, 7};
-		for(int a = 0;a<p.length;a++) {
-			p[a] = new Process(a, arrival[a], burst[a], 0);
-		}
-		SRTF srtf = new SRTF(p);
-		srtf.seedArrivalQueue();
-		srtf.execute();
-		srtf.printGant();
-		srtf.printExecutionHistory();
-	}
-
 }

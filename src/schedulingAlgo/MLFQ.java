@@ -195,7 +195,6 @@ public class MLFQ extends SchedulingAlgorithm{
 			System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
 		}
 		return arrivalQueue;
-		
 	}
 	public boolean sortArrivalQueue(Process current, ArrayList<Process> arrivalQueue) {
 		Process temp;

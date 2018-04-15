@@ -18,7 +18,6 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 		ArrayList<Process> temp1 = new ArrayList<Process>();
 		
 		for(int i = 0; i < processes.length; i++){
-			System.out.println("Process Arrival "+ processes[i].getProcessID());
 			temp1.add(processes[i]);
 		}
 		processQueue.add(processes[index]);
@@ -27,7 +26,6 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 		while (index < processes.length){
 			currentTime += processQueue.get(index).getBurstTime();
 	
-			System.out.println("Size "+temp1.size());
 			for(int i = 1; i < temp1.size(); i++){
 				if(temp1.get(i) != null){
 					if(temp1.get(i).getArrivalTime() < currentTime){
@@ -41,11 +39,7 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 				if(temp1.get(i) == null)
 					temp1.remove(i);
 			}
-			
-			System.out.println("CurrentTime "+ currentTime);
-			for(int i = 0; i < temp.size(); i++){
-				System.out.println("P "+ temp.get(i).getProcessID());
-			}
+	
 			 for(int i=0 ; i<temp.size()-1 ; i++)
 		        {
 		            for(int j=i+1 ; j<temp.size() ;j++)
@@ -64,26 +58,9 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 			 }
 			 index += 1;
 		}
-		
-		for(int i = 0; i < processQueue.size(); i++){
-			System.out.println("Process "+ processQueue.get(i).getProcessID()+ " burst "+ processQueue.get(i).getBurstTime());
-		}
-		System.out.println(processQueue.size());
 		return processQueue;
 	}
 	public ArrayList<Process> getProcessQueue(){
 		return processQueue;
-	}
-	public static void main(String[] args){
-		int[] a = {0,1,2,3,4};
-		int[] b = {9,4,5,7,3};
-		int[] p = {5,3,1,2,4};
-		
-		Process[] p1 = new Process[5];
-		for(int i = 0; i < 5; i++){
-			p1[i] = new Process(i, a[i], b[i], p[i]);
-		}
-		
-		new NoPreemptPrio(p1).schedule();
 	}
 }
