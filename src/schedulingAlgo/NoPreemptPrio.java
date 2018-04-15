@@ -11,7 +11,7 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 		
 		processQueue = new ArrayList<Process>();
 	}
-	public void schedule(){
+	public ArrayList<Process> execute(){
 		currentTime = processes[0].getArrivalTime();
 		int index = 0;
 		ArrayList<Process> temp = new ArrayList<Process>();
@@ -26,8 +26,7 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 		
 		while (index < processes.length){
 			currentTime += processQueue.get(index).getBurstTime();
-			processQueue.get(index).setBurstTime(processQueue.get(index).getBurstTime());
-			 
+	
 			System.out.println("Size "+temp1.size());
 			for(int i = 1; i < temp1.size(); i++){
 				if(temp1.get(i) != null){
@@ -63,7 +62,6 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 			 if(temp.size()>0){
 				 processQueue.add(temp.remove(0));
 			 }
-			 
 			 index += 1;
 		}
 		
@@ -71,8 +69,11 @@ public class NoPreemptPrio extends SchedulingAlgorithm{
 			System.out.println("Process "+ processQueue.get(i).getProcessID()+ " burst "+ processQueue.get(i).getBurstTime());
 		}
 		System.out.println(processQueue.size());
+		return processQueue;
 	}
-	
+	public ArrayList<Process> getProcessQueue(){
+		return processQueue;
+	}
 	public static void main(String[] args){
 		int[] a = {0,1,2,3,4};
 		int[] b = {9,4,5,7,3};

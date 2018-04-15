@@ -134,9 +134,9 @@ public class SRTF extends SchedulingAlgorithm {
 	}
 	
 	public static void main(String[] args) {
-		Process p[] = new Process[2];
-		int arrival[] = {0,2};
-		int burst[] = {9,2};
+		Process p[] = new Process[3];
+		int arrival[] = {0,2, 1};
+		int burst[] = {9,2, 7};
 		for(int a = 0;a<p.length;a++) {
 			p[a] = new Process(a, arrival[a], burst[a], 0);
 		}

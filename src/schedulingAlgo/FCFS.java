@@ -3,31 +3,26 @@ import java.util.ArrayList;
 
 public class FCFS extends SchedulingAlgorithm{
 	private Process[] process;
-	private int burstTimeTotal;
-	private ArrayList<String> gantProcess = new ArrayList<String>();
-	private ArrayList<String> gantLine = new ArrayList<String>();
+	private ArrayList<Process> gantProcess = new ArrayList<Process>();
+	private ArrayList<Process> gantLine = new ArrayList<Process>();
+	private int[] bursts;
 	
 	public FCFS(Process[] process) {
 		super(process);
 		this.process = process;
 	}
 	
-	public void execution() {
+	public ArrayList<Process> execution() {
+		bursts = new int[process.length];
 		for(int a = 0;a<process.length;a++) {
-			gantLine.add(""+burstTimeTotal);
-			gantProcess.add("P"+process[a].getProcessID());
+			gantProcess.add(process[a]);
 			while(process[a].getBurstTime() >0) {
 				process[a].setBurstTime(1);
-				gantLine.add("-");
-				gantProcess.add(" ");
-				burstTimeTotal += 1;
-				
+				bursts[a] +=1;
 			}
 		}
-		gantLine.add(""+burstTimeTotal);
-		
+		return gantProcess;
 	}
-	
 	public void printGant() {
 		for(int a = 0;a<gantProcess.size();a++) {
 			System.out.print(gantProcess.get(a));
@@ -38,6 +33,9 @@ public class FCFS extends SchedulingAlgorithm{
 		}
 	}
 	
+	public int[] getBurst(){
+		return bursts;
+	}
 	public static void main(String[] args) {
 		Process p[] = new Process[10];
 		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
