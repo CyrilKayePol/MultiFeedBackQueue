@@ -396,14 +396,14 @@ public class MLFQ1 extends SchedulingAlgorithm{
 	}
 	public static void main(String[] args){
 		int[] a = {5,4,3,1,2,6, 1};
-		int[] b = {5,6,7,9,2,6, 14};
+		int[] b = {55,66,77,99,22,66, 14};
 		int[] p = {3,1,2, 8 , 0,1, 1};
 		
 		Process[] p1 = new Process[7];
 		for(int i = 0; i < 7; i++){
-			p1[i] = new Process(i+1, a[i], b[i], p[i]);
+			p1[i] = new Process(i, a[i], b[i], p[i]);
 		}
-		String[] algo = {"SJF","Round Robin", "Round Robin", "FCFS", "Non-Preemptive Priority"};
+		String[] algo = {"Round Robin", "Round Robin", "Preemptive Priority","FCFS", "Non-Preemptive Priority"};
 		new MLFQ1(algo, p1).execute();
 	}
 }
