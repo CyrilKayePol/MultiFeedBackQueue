@@ -4,20 +4,23 @@ import java.util.ArrayList;
 
 public class MLFQ1 extends SchedulingAlgorithm{
 	private String[] queueAlgo;
+	private int[] timeQuantum;
 	private Process[] processes;
 	private ArrayList<Process> processQueue;
 	private ArrayList<String> processExec;
 	
-	public MLFQ1(String[] q, Process[] p){
+	public MLFQ1(String[] q, Process[] p, int[] time){
 		super(p);
 		
 		queueAlgo = q;
 		processes = p;
+		timeQuantum = time;
 		
 		processQueue = new ArrayList<Process>();
 		processExec = new ArrayList<String>();
 	}
-	public void execute(){
+	public ArrayList<String> execute(){
+		System.out.println("I came at execute");
 		for(int i = 0; i < queueAlgo.length; i++){
 			if(queueAlgo[i] == "FCFS"){
 				executeFCFS(i);
@@ -38,7 +41,7 @@ public class MLFQ1 extends SchedulingAlgorithm{
 			}
 			else if(queueAlgo[i] == "Round Robin"){
 				System.out.println("RoundRobin");
-				executeRR(i, 4);
+				executeRR(i, timeQuantum[i]);
 			}
 			else{
 				
@@ -48,6 +51,7 @@ public class MLFQ1 extends SchedulingAlgorithm{
 				break;
 			}
 		} // end first for loop
+		return processExec;
 	} // end execute
 	
 	public void executeFCFS(int queueLevel){
@@ -414,7 +418,11 @@ public class MLFQ1 extends SchedulingAlgorithm{
 			executePP1();
 		}
 	}
-	public static void main(String[] args){
+	
+	public ArrayList<String> getProcessExec(){
+		return processExec;
+	}
+/*	public static void main(String[] args){
 		int[] a = {5,4,3,1,2,6, 1};
 		int[] b = {55,66,77,19,22,16, 14};
 		int[] p = {3,1,2, 8 , 0,1, 1};
@@ -423,7 +431,8 @@ public class MLFQ1 extends SchedulingAlgorithm{
 		for(int i = 0; i < 7; i++){
 			p1[i] = new Process(i, a[i], b[i], p[i]);
 		}
+		int[] ab = {1,2,0,0,0,0};
 		String[] algo = {"Round Robin", "Round Robin","SRTF", "Preemptive Priority","FCFS", "Non-Preemptive Priority"};
-		new MLFQ1(algo, p1).execute();
-	}
+		new MLFQ1(algo, p1, ab).execute();
+	}*/
 }

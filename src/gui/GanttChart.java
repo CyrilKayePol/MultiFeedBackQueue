@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import schedulingAlgo.Process;
 
 public class GanttChart extends JPanel implements Runnable{
 	private static final long serialVersionUID = 1L;
@@ -20,21 +19,21 @@ public class GanttChart extends JPanel implements Runnable{
 		setLayout(null);
 	}
 	
-	public GanttChart(ArrayList<Process> processQ){
+	public GanttChart(ArrayList<String> processQ){
 		setLayout(null);
 		
 		init(processQ);
 		setPreferredSize(new Dimension(processQ.size()* 25, 100));
 	}
 	
-	public void init(ArrayList<Process> processQ){
+	public void init(ArrayList<String> processQ){
 		processLabels = new JLabel[processQ.size()];
 		jobLabels = new JLabel[processQ.size()];
 		int startX = 5;
 		int startX1 = 5;
 		
 		for (int i = 0; i < processQ.size(); i++){
-			processLabels[i] = new JLabel("P"+processQ.get(i).getProcessID(), JLabel.CENTER);
+			processLabels[i] = new JLabel(processQ.get(i), JLabel.CENTER);
 			processLabels[i].setBackground(Color.pink);
 			processLabels[i].setOpaque(true);
 			processLabels[i].setBounds(startX, 5, 20, 86);
@@ -47,19 +46,21 @@ public class GanttChart extends JPanel implements Runnable{
 		int id = -1;
 		for(int i = 0; i < processQ.size(); i++){
 			
-			if(id != processQ.get(i).getProcessID()) {
+			int comp = Integer.parseInt(""+processQ.get(i).charAt(1));
+			if(id != comp) {
 				startX1 +=5;
-				id = processQ.get(i).getProcessID();
+				id = comp;
 			}
 			
 			if(i != processQ.size()-1) {
-				if(id != processQ.get(i+1).getProcessID()) {
-					jobLabels[i] = new JLabel("P"+processQ.get(i).getProcessID(), JLabel.CENTER);
+				int comp1 = Integer.parseInt(""+processQ.get(i+1).charAt(1));
+				if(id != comp1) {
+					jobLabels[i] = new JLabel(processQ.get(i), JLabel.CENTER);
 				}else {
 					jobLabels[i] = new JLabel();
 				}
 			}else {
-				jobLabels[i] = new JLabel("P"+processQ.get(i).getProcessID(), JLabel.CENTER);
+				jobLabels[i] = new JLabel(processQ.get(i), JLabel.CENTER);
 			}
 			
 			jobLabels[i].setBackground(Color.cyan);
@@ -98,6 +99,7 @@ public class GanttChart extends JPanel implements Runnable{
 					threadedReadyQueue.add(noMoreP);
 					threadedReadyQueue.repaint();
 					MainPanel.start.setEnabled(true);
+					MainPanel.setEnabledAll(MainPanel.dataPanel, true);
 				}
 			}
 			else{

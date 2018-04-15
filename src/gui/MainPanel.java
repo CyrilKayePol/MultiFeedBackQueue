@@ -2,6 +2,8 @@ package gui;
 
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,8 +19,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import schedulingAlgo.MLFQ1;
 import schedulingAlgo.Process;
-import schedulingAlgo.RoundRobin;
 
 public class MainPanel extends JPanel implements ActionListener{
 	
@@ -28,15 +30,16 @@ public class MainPanel extends JPanel implements ActionListener{
 	private JTextField numJobsfield, averageWaitfield, averageTRfield, averageResponsefield;
 	private JComboBox<Integer> numQLevelfield;
 	private JComboBox<String> algorithmList;
-	private JButton populate, restart;
+	private JButton populate;
 	public static JButton start;
+	public static JPanel dataPanel;
 	private Object[][] obj;
 	private Object[][] obj1;
 	private Process[] processes;
 	private int numberJobs, numberQueue = 3;
-	private RoundRobin rr;
+	private MLFQ1 mlfq;
 	
-	private JPanel dataPanel, jobPoolPanel, readyQueuePanel, 
+	private JPanel  jobPoolPanel, readyQueuePanel, 
 		averagePanel, ganttChartPanel, queuePanel;
 	private JLabel data, jobPool, readyQueue, average, ganttChart, 
 		numOfJobs, numQLevels, averageWait, averageTurnAround, 
@@ -129,6 +132,7 @@ public class MainPanel extends JPanel implements ActionListener{
 		
 		numQLevelfield = new JComboBox<Integer> (numOfLevel);
 		numQLevelfield.setBounds(220, 68, 200, 20);
+		numQLevelfield.addActionListener(this);
 		
 		populate = new JButton("Populate Job Pool");
 		populate.setBounds(445, 52, 200, 30);
@@ -138,8 +142,6 @@ public class MainPanel extends JPanel implements ActionListener{
 		
 		initJobPoolPanelComponents();
 		start.setEnabled(false);
-		restart.setEnabled(false);
-		
 		averageWait = new JLabel("Average Waiting Time");
 		averageWait.setBounds(15, 60, 200, 20);
 		averageWait.setFont(new Font("Arial", Font.BOLD, 15));
@@ -179,38 +181,39 @@ public class MainPanel extends JPanel implements ActionListener{
 		for(int i = 0; i < numberQueue; i++){
 			for(int j = 0; j < 4; j++){
 				if(j == 0){
-					obj[i][j] = i+1;
+					obj[i][0] = i+1;
+				}
+				else if(j == 3){
+					obj[i][3] = i+1;
 				}
 			}
 		}
 		tableModel = new TheTableModel(obj,columnNames);
+		tableModel.tableUsing("queueTable");
+		
 		queueTable = new JTable(tableModel);
 		queueTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(algorithmList));
-	
 		queuePane = new JScrollPane(queueTable);
 		queuePane.setBounds(0, 0, queuePanel.getWidth(), queuePanel.getHeight());
 	}
 	public void initJobPoolPanelComponents(){
 		jobTableModel = new TheTableModel(obj1,jobColumnNames);
+		jobTableModel.tableUsing("jobTable");
+		
 		jobTable = new JTable(jobTableModel);
 
 		jobPane = new JScrollPane(jobTable);
 		jobPane.setBounds(15, 45, 640, 148);
 		
 		start = new JButton("Start Gantt Chart Simulation");
-		start.setBounds(15, 201, 490, 40);
+		start.setBounds(92, 201, 490, 40);
 		start.addActionListener(this);
-		
-		restart = new JButton("Restart");
-		restart.setBounds(510, 201, 145, 40);
-		restart.addActionListener(this);
 	}
 	
 	public void addJobPoolPanelComponents(){
 		jobPoolPanel.add(jobPool);
 		jobPoolPanel.add(jobPane);
 		jobPoolPanel.add(start);
-		jobPoolPanel.add(restart);
 	}
 	public void addComponents(){
 		add(dataPanel);
@@ -278,7 +281,6 @@ public class MainPanel extends JPanel implements ActionListener{
 			try{
 				numberJobs = Integer.parseInt(numJob);
 				jobPoolPanel.removeAll();
-				queuePanel.removeAll();
 				
 				obj1 = new Object[numberJobs][4];
 				for(int i = 0; i < numberJobs; i++){
@@ -288,14 +290,8 @@ public class MainPanel extends JPanel implements ActionListener{
 				initJobPoolPanelComponents();
 				addJobPoolPanelComponents();
 				
-				initQueuePanelComponents();
-				queuePanel.add(queuePane);
-				
 				jobPoolPanel.repaint();
 				jobPoolPanel.revalidate();
-				
-				queuePanel.repaint();
-				queuePanel.revalidate();
 			}
 			catch(Exception e){
 				System.err.println(e.getMessage());
@@ -303,13 +299,18 @@ public class MainPanel extends JPanel implements ActionListener{
 		}
 		else if (obj == start){
 			start.setEnabled(false);
+			setEnabledAll(dataPanel, false);
 			startAction();
 		}
-		else if(obj == restart){
-			if(threadedGanttChart.getIsRunning() == true){
-				threadedGanttChart.setIsRunningFalse();
-				startAction();
-			}
+		else if(obj == numQLevelfield){
+			numberQueue = (Integer)numQLevelfield.getSelectedItem();
+			
+			queuePanel.removeAll();
+			initQueuePanelComponents();
+			queuePanel.add(queuePane);
+			
+			queuePanel.repaint();
+			queuePanel.revalidate();
 		}
 	}
 	
@@ -318,35 +319,68 @@ public class MainPanel extends JPanel implements ActionListener{
 			if (jobTable.isEditing())
 			    jobTable.getCellEditor().stopCellEditing();
 			
-			processes = new Process[numberJobs];
-			System.out.println ("Job Arrival Burst Priority");
-			for(int i = 0; i < numberJobs; i++){
-				processes[i] = new Process((Integer) jobTable.getModel().getValueAt(i, 0), (Integer) jobTable.getModel().getValueAt(i, 1),
-						(Integer) jobTable.getModel().getValueAt(i, 2), (Integer) jobTable.getModel().getValueAt(i, 3) );
-				
-				System.out.println("Process " + processes[i].getProcessID() + " " + processes[i].getArrivalTime()+
-						" " + processes[i].getBurstTime() + processes[i].getPriorityNum());
-			}
-			/*
-			System.out.println ("Queue Algo Quantum Priority");
-			for(int i = 0; i < numberQueue; i++){
-				for(int j = 0; j < 4; j++){
-					if(j != 1){
-						int a = Integer.parseInt(queueTable.getModel().getValueAt(i, j) + "");
-						System.out.print(" "+ a);
+			if (queueTable.isEditing())
+			    queueTable.getCellEditor().stopCellEditing();
+			String[] algo = new String[numberQueue];
+			int[] quantum = new int[numberQueue];
+			
+		    while(true){
+		    	try{
+					processes = new Process[numberJobs];
+					for(int i = 0; i < numberJobs; i++){
+						processes[i] = new Process((Integer) jobTable.getModel().getValueAt(i, 0), (Integer) jobTable.getModel().getValueAt(i, 1),
+								(Integer) jobTable.getModel().getValueAt(i, 2), (Integer) jobTable.getModel().getValueAt(i, 3) );
+					}
+					
+					for(int i = 0; i < numberQueue; i++){
+						for(int j = 0; j < 4; j++){
+							if(j == 1){
+								algo[i] = (String) queueTable.getModel().getValueAt(i,j);
+							}
+							else if(j == 2){
+								if(algo[i] == "Round Robin"){
+									quantum[i] = (Integer) queueTable.getModel().getValueAt(i,j);
+								}
+								else{
+									quantum[i] = 0;
+								}
+							}
+						}
+						System.out.println();
+					}
+					boolean toContinue = false;
+					for(int i = 0; i < numberQueue; i++){
+						if(algo[i] == null){
+							toContinue = true;
+							break;
+						}
+					}
+					
+					if(toContinue){
+						Integer.parseInt("Hi");
 					}
 					else{
-						System.out.print(" "+ queueTable.getModel().getValueAt(i, j));
+						for(int i = 0; i < numberQueue; i++){
+							if(quantum[i] == 0 && algo[i] == "Round Robin"){
+								Integer.parseInt("Hi");
+								break;
+							}
+						}
 					}
+					
+					break;
 				}
-				System.out.println();
-			}
-			*/
-			rr = new RoundRobin(processes, 3);
-			rr.schedule();
+				catch(Exception e){
+					System.out.println("At inner try: Wrong input");
+					start.setEnabled(true);
+					throw e;
+				}
+		    }
+			mlfq = new MLFQ1(algo, processes, quantum);
 			
 			ganttChartPanel.removeAll();
-			threadedGanttChart = new GanttChart(rr.getProcessQueue());
+			mlfq.printProcess();
+			threadedGanttChart = new GanttChart(mlfq.execute());
 			ganttChartPane = new JScrollPane(threadedGanttChart);
 			ganttChartPane.setBounds(15, 55, 1310, 100);
 			addGanttChartPanelComponents();
@@ -360,13 +394,29 @@ public class MainPanel extends JPanel implements ActionListener{
 			Thread thread = new Thread(threadedGanttChart);
 			thread.start();
 		
+			readyQueuePanel.removeAll();
+			readyQueuePanel.add(readyQueue);
 			readyQueuePane = new JScrollPane(threadedGanttChart.getThreadedReadyQueue());
 			readyQueuePane.setBounds(15, 55, 895, 100);
 			readyQueuePanel.add(readyQueuePane);
+			
+			readyQueuePanel.repaint();
+			readyQueuePanel.revalidate();
 		}
 		catch(Exception e){
 			System.out.print("At MainPanel");
 			System.err.println(e.getMessage());
 		}
 	}
+	public static void setEnabledAll(Container container, boolean enabled) {
+		   Component[] components = container.getComponents();
+		   if (components.length > 0) {
+		      for (Component component : components) {
+		         component.setEnabled(enabled);
+		         if (component instanceof Container) { // has to be a container to contain components
+		            setEnabledAll((Container)component, enabled); // the recursive call
+		         }
+		      }
+		   }
+		}
 }
