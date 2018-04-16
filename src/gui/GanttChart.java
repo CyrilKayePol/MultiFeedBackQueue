@@ -99,6 +99,10 @@ public class GanttChart extends JPanel implements Runnable{
 					threadedReadyQueue.repaint();
 					MainPanel.start.setEnabled(true);
 					MainPanel.setEnabledAll(MainPanel.dataPanel, true);
+					
+					MainPanel.averageWaitfield.setText(MainPanel.avgWaitingTime+"");
+					MainPanel.averageTRfield.setText(MainPanel.avgTurnAroundTime +"");
+					MainPanel.averageResponsefield.setText(MainPanel.avgResponseTime+"");
 				}
 			}
 			else{

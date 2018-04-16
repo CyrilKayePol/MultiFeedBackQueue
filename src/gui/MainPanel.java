@@ -27,7 +27,9 @@ public class MainPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private JMenuItem aboutMenu;
 	private JMenuBar menuBar;
-	private JTextField numJobsfield, averageWaitfield, averageTRfield, averageResponsefield;
+	private JTextField numJobsfield;
+	public static JTextField averageWaitfield, averageTRfield, averageResponsefield;
+	public static double avgWaitingTime, avgTurnAroundTime, avgResponseTime;
 	private JComboBox<Integer> numQLevelfield;
 	private JComboBox<String> algorithmList;
 	private JButton populate;
@@ -382,6 +384,22 @@ public class MainPanel extends JPanel implements ActionListener{
 			
 			ganttChartPanel.removeAll();
 			threadedGanttChart = new GanttChart(mlfq.execute());
+			mlfq.computeTurnAroundTime();
+			mlfq.computeResponseTime();
+			
+			double w = 0, tr =0, rt = 0;
+			for(int i = 0; i < processes.length; i++){
+				tr += processes[i].getTurnAroundTime();
+				w+= processes[i].getWaitingTime();
+				rt += processes[i].getResponseTime();
+			}
+			
+			avgTurnAroundTime = tr / processes.length;
+			avgWaitingTime = w/processes.length;
+			avgResponseTime = rt/processes.length;
+			
+			
+			System.out.println("Turn: "+ avgTurnAroundTime + "Wait: "+avgWaitingTime + "Response: " +avgResponseTime);
 			ganttChartPane = new JScrollPane(threadedGanttChart);
 			ganttChartPane.setBounds(15, 55, 1310, 100);
 			addGanttChartPanelComponents();
