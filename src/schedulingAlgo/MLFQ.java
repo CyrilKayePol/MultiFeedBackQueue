@@ -175,6 +175,10 @@ public class MLFQ extends SchedulingAlgorithm{
 					entry();
 					if((!q1.isEmpty()) && level == LOWLEVEL) {
 						System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
+						proc.setPreemtedCount(1);
+						updateProcess(proc);
+						q1.add(proc);
+						arrivalQueue.remove(proc);
 						return arrivalQueue;
 					}
 					
@@ -186,6 +190,8 @@ public class MLFQ extends SchedulingAlgorithm{
 				}else {
 					proc.setPreemtedCount(1);
 					updateProcess(proc);
+					preempted.add(proc);
+					arrivalQueue.remove(proc);
 					System.out.println("[preempted "+proc.getProcessID()+" at time "+currentBurstTime+" remaining = "+proc.getBurstTime());
 					break;
 				}
@@ -253,8 +259,8 @@ public class MLFQ extends SchedulingAlgorithm{
 	
 	public static void main(String[] args) {
 		Process p[] = new Process[4];
-		int arrival[] = {1,5,6,4};
-		int burst[] =   {4,8,2,3};
+		int arrival[] = {1,2,6,4};
+		int burst[] =   {4,1,2,3};
 		int priority[] ={1,5,3,4};
 		for(int a = 0;a<p.length;a++) {
 			p[a] = new Process(a, arrival[a], burst[a], priority[a]);
