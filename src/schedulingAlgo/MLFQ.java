@@ -1,7 +1,6 @@
 package schedulingAlgo;
 
 import java.util.ArrayList;
-import schedulingAlgo.Process;
 
 
 public class MLFQ extends SchedulingAlgorithm{
@@ -16,7 +15,6 @@ public class MLFQ extends SchedulingAlgorithm{
 	public MLFQ(Process[] p) {
 		super(p);
 		this.p = p;
-		
 		q1 = new ArrayList<Process>();
 		q2 = new ArrayList<Process>();
 		q3 = new ArrayList<Process>();
@@ -26,6 +24,8 @@ public class MLFQ extends SchedulingAlgorithm{
 		totalBurstTime = getTotalBurstTime();
 		
 	}
+	
+	
 	public void execute() {
 		entry();
 		boolean isExecutingAProcess = false;
@@ -80,7 +80,7 @@ public class MLFQ extends SchedulingAlgorithm{
 	}
 	
 	private void q1execute() {
-		q1 = roundRobin(q1, HIGHLEVEL, 3);
+		q1 = srtfORpreemptivePrio(q1, HIGHLEVEL, false);
 		q2.addAll(preempted);
 		System.out.println("======");
 		
@@ -190,6 +190,8 @@ public class MLFQ extends SchedulingAlgorithm{
 				}else {
 					proc.setPreemtedCount(1);
 					updateProcess(proc);
+					preempted.add(proc);
+					arrivalQueue.remove(proc);
 					System.out.println("[preempted "+proc.getProcessID()+" at time "+currentBurstTime+" remaining = "+proc.getBurstTime());
 					break;
 				}
@@ -255,52 +257,13 @@ public class MLFQ extends SchedulingAlgorithm{
 		}
 	}
 	
-	
-	public ArrayList<Process> roundRobin(ArrayList<Process> arrivalQueue, int level, int timeQuantum){
-		Process proc = null;
-		while(!arrivalQueue.isEmpty()){
-			proc = arrivalQueue.get(0);
-			
-			for(int i = 0; i < timeQuantum; i++){
-				currentBurstTime += 1;
-				
-				if(proc.getBurstTime() > 0){
-					proc.setBurstTime(1);
-					updateProcess(proc);
-					entry();
-					
-					if(i == timeQuantum -1 && proc.getBurstTime() > 0){
-						preempted.add(proc);
-					}
-				}
-				else
-				{
-					currentBurstTime -= 1;
-					break;
-				}
-				
-				if((!q1.isEmpty()) && level == LOWLEVEL) {
-					System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime + " burst "+proc.getBurstTime());
-					q1.add(proc);
-					proc.setPreemtedCount(1);
-					arrivalQueue.remove(proc);
-					
-					return arrivalQueue;
-				}
-			}
-			System.out.println("Proc "+ proc.getProcessID()+"-burst time-"+ proc.getBurstTime() + "-at time "+currentBurstTime);
-			arrivalQueue.remove(proc);
-		}
-		System.out.println("ArrivalQueue Size"+ arrivalQueue.size());
-		System.out.println("Preempted Size"+ preempted.size());
-		return arrivalQueue;
-	}
 	public static void main(String[] args) {
-		Process p[] = new Process[10];
-		int arrival[] = {1,15,16,14,12,12,0,17,17,4};
-		int burst[] =   {4,8,2,3,2,6,7,2,12,9};
+		Process p[] = new Process[4];
+		int arrival[] = {1,2,6,4};
+		int burst[] =   {4,1,2,3};
+		int priority[] ={1,5,3,4};
 		for(int a = 0;a<p.length;a++) {
-			p[a] = new Process(a, arrival[a], burst[a], 0);
+			p[a] = new Process(a, arrival[a], burst[a], priority[a]);
 		}
 		MLFQ mlfq = new MLFQ(p);
 		mlfq.execute();
