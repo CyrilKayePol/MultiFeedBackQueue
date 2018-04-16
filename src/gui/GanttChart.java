@@ -23,7 +23,7 @@ public class GanttChart extends JPanel implements Runnable{
 		setLayout(null);
 		
 		init(processQ);
-		setPreferredSize(new Dimension(processQ.size()* 25, 100));
+		setPreferredSize(new Dimension(processQ.size()* 30, 100));
 	}
 	
 	public void init(ArrayList<String> processQ){
@@ -36,13 +36,13 @@ public class GanttChart extends JPanel implements Runnable{
 			processLabels[i] = new JLabel(processQ.get(i), JLabel.CENTER);
 			processLabels[i].setBackground(Color.pink);
 			processLabels[i].setOpaque(true);
-			processLabels[i].setBounds(startX, 5, 20, 86);
-			startX += 25;
+			processLabels[i].setBounds(startX, 5, 25, 86);
+			startX += 30;
 		}
 		
 		threadedReadyQueue = new JPanel();
 		threadedReadyQueue.setLayout(null);
-		threadedReadyQueue.setPreferredSize(new Dimension(processQ.size()* 25, 100));
+		threadedReadyQueue.setPreferredSize(new Dimension(processQ.size()* 30, 100));
 		int id = -1;
 		for(int i = 0; i < processQ.size(); i++){
 			
@@ -65,9 +65,9 @@ public class GanttChart extends JPanel implements Runnable{
 			
 			jobLabels[i].setBackground(Color.cyan);
 			jobLabels[i].setOpaque(true);
-			jobLabels[i].setBounds(startX1, 5, 20, 65);
+			jobLabels[i].setBounds(startX1, 5, 25, 65);
 			threadedReadyQueue.add(jobLabels[i]);
-			startX1 += 20;
+			startX1 += 25;
 		}
 	}
 	
@@ -77,7 +77,6 @@ public class GanttChart extends JPanel implements Runnable{
 	public void run(){
 		for(int i =0 ; i < processLabels.length; i++){
 			if(isRunning){
-				System.out.println(processLabels[i].getText());
 				add(processLabels[i]);
 				jobLabels[i].setVisible(false);
 				

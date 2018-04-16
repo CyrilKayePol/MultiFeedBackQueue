@@ -2,6 +2,7 @@ package schedulingAlgo;
 public class Process implements Comparable<Process> {
 	private int arrivalTime, burstTime, priority, processID;
 	private int preemptedCount = 0;
+//	private int quantum = 0;
 	public Process(int pID, int arrive, int burst, int prio){
 		
 		processID = pID;
@@ -34,7 +35,14 @@ public class Process implements Comparable<Process> {
 	public int getPriorityNum(){
 		return priority;
 	}
-	
+/*	
+	public void setQuantum(){
+		quantum += 1;
+	}
+	public int getQuantum(){
+		return quantum;
+	}
+*/	
 	public int getPreemptedCount() {
 		return preemptedCount;
 	}

@@ -68,9 +68,23 @@ public class RoundRobin extends SchedulingAlgorithm{
 			}
 		}
 		
+		for(int i =0; i < processQueue.size(); i++){
+			System.out.println("PQ "+processQueue.get(i).getProcessID());
+		}
+		
 	}
 	
 	public ArrayList<Process> getProcessQueue(){
 		return processQueue;
+	}
+	public static void main(String[] args) {
+		Process p[] = new Process[1];
+		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
+		int burst[] =   {4,8,2,3,2,6,7,2,2,9};
+		for(int a = 0;a<p.length;a++) {
+			p[a] = new Process(a, arrival[a], burst[a], 0);
+		}
+		RoundRobin mlfq = new RoundRobin(p, 3);
+		mlfq.schedule();
 	}
 }

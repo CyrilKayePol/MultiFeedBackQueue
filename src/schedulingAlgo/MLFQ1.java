@@ -422,6 +422,10 @@ public class MLFQ1 extends SchedulingAlgorithm{
 	public ArrayList<String> getProcessExec(){
 		return processExec;
 	}
+	
+	public void computeTurnAroundTime(){
+		
+	}
 /*	public static void main(String[] args){
 		int[] a = {5,4,3,1,2,6, 1};
 		int[] b = {55,66,77,19,22,16, 14};

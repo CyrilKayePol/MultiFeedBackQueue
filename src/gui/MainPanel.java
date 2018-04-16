@@ -18,9 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.text.BadLocationException;
 
-import schedulingAlgo.MLFQ1;
+import schedulingAlgo.MLFQ2;
 import schedulingAlgo.Process;
 
 public class MainPanel extends JPanel implements ActionListener{
@@ -38,7 +37,7 @@ public class MainPanel extends JPanel implements ActionListener{
 	private Object[][] obj1;
 	private Process[] processes;
 	private int numberJobs, numberQueue = 3;
-	private MLFQ1 mlfq;
+	private MLFQ2 mlfq;
 	
 	private JPanel  jobPoolPanel, readyQueuePanel, 
 		averagePanel, ganttChartPanel, queuePanel;
@@ -47,7 +46,7 @@ public class MainPanel extends JPanel implements ActionListener{
 		averageResponse, arrow;
 	private String[] schedulingAlgorithms = {"FCFS", "SJF", "SRTF", "Non-Preemptive Priority",
 			"Preemptive Priority", "Round Robin"};
-	private Integer[] numOfLevel = {3, 4, 5, 6, 7, 8, 9, 10};
+	private Integer[] numOfLevel = {1, 2, 3, 4, 5};
 	private String[] columnNames = {"Queue ID", "Algorithm", "Quantum", "Priority"};
 	private String[] jobColumnNames = {"Job ID", "Arrival Time", "Burst Time", "Priority"};
 	
@@ -133,6 +132,7 @@ public class MainPanel extends JPanel implements ActionListener{
 		
 		numQLevelfield = new JComboBox<Integer> (numOfLevel);
 		numQLevelfield.setBounds(220, 68, 200, 20);
+		numQLevelfield.setSelectedItem(numOfLevel[2]);
 		numQLevelfield.addActionListener(this);
 		
 		populate = new JButton("Populate Job Pool");
@@ -302,7 +302,6 @@ public class MainPanel extends JPanel implements ActionListener{
 		}
 		else if (obj == start){
 			start.setEnabled(false);
-			setEnabledAll(dataPanel, false);
 			startAction();
 		}
 		else if(obj == numQLevelfield){
@@ -349,7 +348,6 @@ public class MainPanel extends JPanel implements ActionListener{
 								}
 							}
 						}
-						System.out.println();
 					}
 					boolean toContinue = false;
 					for(int i = 0; i < numberQueue; i++){
@@ -379,10 +377,10 @@ public class MainPanel extends JPanel implements ActionListener{
 					throw e;
 				}
 		    }
-			mlfq = new MLFQ1(algo, processes, quantum);
+		    setEnabledAll(dataPanel, false);
+			mlfq = new MLFQ2(processes, algo, quantum);
 			
 			ganttChartPanel.removeAll();
-			mlfq.printProcess();
 			threadedGanttChart = new GanttChart(mlfq.execute());
 			ganttChartPane = new JScrollPane(threadedGanttChart);
 			ganttChartPane.setBounds(15, 55, 1310, 100);
