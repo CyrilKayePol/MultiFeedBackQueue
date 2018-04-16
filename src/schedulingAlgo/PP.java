@@ -1,7 +1,7 @@
 package schedulingAlgo;
 import java.util.ArrayList;
 
-public class SRTF extends SchedulingAlgorithm {
+public class PP extends SchedulingAlgorithm {
 	private ArrayList<Process> arrivalQueue;
 	private int burstTimeTotal;
 	private Process[] process;
@@ -9,7 +9,7 @@ public class SRTF extends SchedulingAlgorithm {
 	private ArrayList<String> gantLine = new ArrayList<String>();
 	private ArrayList<String> processExec = new ArrayList<String>();
 	
-	public SRTF(Process[] process) {
+	public PP(Process[] process) {
 		super(process);
 		this.process = process;
 		arrivalQueue = new ArrayList<Process>();
@@ -31,8 +31,8 @@ public class SRTF extends SchedulingAlgorithm {
 		Process temp;
 		for(int b = 0;b<arrivalQueue.size();b++) {
 			for(int a = b+1;a<arrivalQueue.size();a++) {
-				int bt1 = arrivalQueue.get(b).getBurstTime();
-				int bt2 = arrivalQueue.get(a).getBurstTime();
+				int bt1 = arrivalQueue.get(b).getPriorityNum();
+				int bt2 = arrivalQueue.get(a).getPriorityNum();
 				if( bt1>bt2 ) {
 					temp = arrivalQueue.get(b);
 					arrivalQueue.set(b, arrivalQueue.get(a));
@@ -94,6 +94,7 @@ public class SRTF extends SchedulingAlgorithm {
 			gantProcess.add(proc);
 			gantLine.add(burstTimeTotal+"");
 			int length = proc.getBurstTime();
+			System.out.println("P"+proc.getProcessID()+ " start = "+burstTimeTotal);
 			for(int a = 0;a<length;a++) {
 				if(continueExecution) {
 					burstTimeTotal +=1;
@@ -108,9 +109,11 @@ public class SRTF extends SchedulingAlgorithm {
 						arrivalQueue.remove(proc);
 					}
 				}else {
+					System.out.println("::P"+proc.getProcessID()+ " end = "+burstTimeTotal);
 					break;
 				}
 			}
+			System.out.println("P"+proc.getProcessID()+ " end = "+burstTimeTotal);
 		}
 		gantLine.add(burstTimeTotal+"");
 		return gantProcess;
@@ -135,5 +138,20 @@ public class SRTF extends SchedulingAlgorithm {
 			System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
 		}
 	}
-
+	public static void main(String[] args) {
+		int a[] = {1,3,2,0,8};
+		int b[] = {10,5,2,7,1};
+		int p[] = {1,5,3,2,1};
+		
+		Process process[] = new Process[5];
+		for(int i = 0;i<process.length;i++) {
+			process[i] = new Process(i,a[i], b[i], p[i]);
+		}
+		
+		PP n = new PP(process);
+		n.seedArrivalQueue();
+		n.execute();
+		n.printGant();
+		//n.printExecutionHistory();
+	}
 }

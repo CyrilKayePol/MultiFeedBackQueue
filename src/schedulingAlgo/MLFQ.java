@@ -80,26 +80,26 @@ public class MLFQ extends SchedulingAlgorithm{
 	}
 	
 	private void q1execute() {
-		q1 = srtf(q1,HIGHLEVEL);
+		q1 = srtfORpreemptivePrio(q1, HIGHLEVEL, false);
 		q2.addAll(preempted);
 		System.out.println("======");
 		
 	}
 	
 	private void q2execute() {
-		q2 = srtf(q2, LOWLEVEL);
+		q2 = srtfORpreemptivePrio(q2, LOWLEVEL, false);
 		q3.addAll(preempted);
 		System.out.println("+++++++");
 	}
 	
 	private void q3execute() {
-		q3 = sjf(q3, LOWLEVEL);
+		q3 = sjfORnonPreemptivePrio(q3, LOWLEVEL, false);
 		q4.addAll(preempted);
 		System.out.println("*******");
 	}
 	
 	private void q4execute() {
-		q4 = sjf(q4, LOWLEVEL);
+		q4 = sjfORnonPreemptivePrio(q4, LOWLEVEL, false);
 		q5.addAll(preempted);
 		System.out.println("///////");
 	}
@@ -130,10 +130,10 @@ public class MLFQ extends SchedulingAlgorithm{
 		
 	}
 	
-	public ArrayList<Process> sjf(ArrayList<Process> arrivalQueue, int level) {
+	public ArrayList<Process> sjfORnonPreemptivePrio(ArrayList<Process> arrivalQueue, int level, boolean isNPP) {
 		Process proc = null;
 		while(!arrivalQueue.isEmpty()) {
-			sortArrivalQueue(proc, arrivalQueue);
+			sortArrivalQueue(proc, arrivalQueue, isNPP);
 
 			proc = arrivalQueue.get(0);
 			arrivalQueue.remove(proc);
@@ -157,10 +157,10 @@ public class MLFQ extends SchedulingAlgorithm{
 		return arrivalQueue;
 		
 	}
-	public ArrayList<Process> srtf(ArrayList<Process> arrivalQueue, int level) {
+	public ArrayList<Process> srtfORpreemptivePrio(ArrayList<Process> arrivalQueue, int level, boolean isPP) {
 		boolean continueExecution = true;
 		Process proc = null;
-		sortArrivalQueue(proc, arrivalQueue);
+		sortArrivalQueue(proc, arrivalQueue, isPP);
 		while(!arrivalQueue.isEmpty()) {
 			continueExecution = true;
 			proc = arrivalQueue.get(0);
@@ -175,11 +175,10 @@ public class MLFQ extends SchedulingAlgorithm{
 					entry();
 					if((!q1.isEmpty()) && level == LOWLEVEL) {
 						System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
-						
 						return arrivalQueue;
 					}
 					
-					continueExecution = sortArrivalQueue(proc, arrivalQueue);
+					continueExecution = sortArrivalQueue(proc, arrivalQueue, isPP);
 					
 					if(proc.getBurstTime() == 0) {
 						arrivalQueue.remove(proc);
@@ -196,12 +195,21 @@ public class MLFQ extends SchedulingAlgorithm{
 		}
 		return arrivalQueue;
 	}
-	public boolean sortArrivalQueue(Process current, ArrayList<Process> arrivalQueue) {
+	
+
+	public boolean sortArrivalQueue(Process current, ArrayList<Process> arrivalQueue, boolean prioritySched) {
 		Process temp;
 		for(int b = 0;b<arrivalQueue.size();b++) {
 			for(int a = b+1;a<arrivalQueue.size();a++) {
-				int bt1 = arrivalQueue.get(b).getBurstTime();
-				int bt2 = arrivalQueue.get(a).getBurstTime();
+				int bt1,bt2;
+				if(prioritySched) {
+					bt1 = arrivalQueue.get(b).getPriorityNum();
+					bt2 = arrivalQueue.get(a).getPriorityNum();
+				}else {
+					bt1 = arrivalQueue.get(b).getBurstTime();
+					bt2 = arrivalQueue.get(a).getBurstTime();
+				}
+				
 				if( bt1>bt2 ) {
 					temp = arrivalQueue.get(b);
 					arrivalQueue.set(b, arrivalQueue.get(a));
@@ -236,7 +244,7 @@ public class MLFQ extends SchedulingAlgorithm{
 	
 	public void updateProcess(Process current) {
 		for(int a = 0;a<p.length;a++) {
-			if(p[a].getProcessID() == p[a].getProcessID()) {
+			if(current.getProcessID() == p[a].getProcessID()) {
 				p[a] = current;
 				break;
 			}
@@ -244,11 +252,12 @@ public class MLFQ extends SchedulingAlgorithm{
 	}
 	
 	public static void main(String[] args) {
-		Process p[] = new Process[10];
-		int arrival[] = {1,5,6,4,2,2,0,7,7,4};
-		int burst[] =   {4,8,2,3,2,6,7,2,2,9};
+		Process p[] = new Process[4];
+		int arrival[] = {1,5,6,4};
+		int burst[] =   {4,8,2,3};
+		int priority[] ={1,5,3,4};
 		for(int a = 0;a<p.length;a++) {
-			p[a] = new Process(a, arrival[a], burst[a], 0);
+			p[a] = new Process(a, arrival[a], burst[a], priority[a]);
 		}
 		MLFQ mlfq = new MLFQ(p);
 		mlfq.execute();
