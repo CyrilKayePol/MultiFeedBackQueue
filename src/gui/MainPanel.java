@@ -304,6 +304,10 @@ public class MainPanel extends JPanel implements ActionListener{
 		}
 		else if (obj == start){
 			start.setEnabled(false);
+			MainPanel.averageWaitfield.setText("");
+			MainPanel.averageTRfield.setText("");
+			MainPanel.averageResponsefield.setText("");
+			
 			startAction();
 		}
 		else if(obj == numQLevelfield){
