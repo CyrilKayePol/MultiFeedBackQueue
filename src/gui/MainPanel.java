@@ -110,7 +110,7 @@ public class MainPanel extends JPanel implements ActionListener{
 		setFontStyle(jobPool);
 		
 		readyQueue = new JLabel("READY QUEUE", JLabel.CENTER);
-		readyQueue.setBounds(-20, 0, 970, 35);
+		readyQueue.setBounds(-20, 5, 970, 35);
 		setFontStyle(readyQueue);
 		
 		average = new JLabel("AVERAGE TIME", JLabel.CENTER);
@@ -428,7 +428,7 @@ public class MainPanel extends JPanel implements ActionListener{
 		}
 		catch(Exception e){
 			System.out.print("At MainPanel");
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	public static void setEnabledAll(Container container, boolean enabled) {

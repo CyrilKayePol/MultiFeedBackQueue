@@ -67,7 +67,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 				if(!q1.isEmpty()) {break;}
 			}
 			while(!q5.isEmpty()) {
-				q5execute(queueNames[5]);
+				q5execute(queueNames[4]);
 				isExecutingAProcess = true;
 				if(!q1.isEmpty()) {break;}
 			}
