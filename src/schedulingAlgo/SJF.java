@@ -111,18 +111,18 @@ public class SJF extends SchedulingAlgorithm {
 	}
 	public void printGant() {
 		for(int a = 0;a<gantProcess.size();a++) {
-			System.out.print(gantProcess.get(a).getProcessID());
+			//System.out.print(gantProcess.get(a).getProcessID());
 		}
-		System.out.println();
+		//System.out.println();
 		for(int b = 0;b<gantLine.size();b++) {
-			System.out.print(gantLine.get(b));
+			//System.out.print(gantLine.get(b));
 		}
 	}
 	
 	public void printExecutionHistory() {
-		System.out.println();
+		//System.out.println();
 		for(int a = 0;a<process.length;a++) {
-			System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
+			//System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
 		}
 	}
 }

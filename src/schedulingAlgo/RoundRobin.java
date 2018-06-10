@@ -69,7 +69,7 @@ public class RoundRobin extends SchedulingAlgorithm{
 		}
 		
 		for(int i =0; i < processQueue.size(); i++){
-			System.out.println("PQ "+processQueue.get(i).getProcessID());
+			//System.out.println("PQ "+processQueue.get(i).getProcessID());
 		}
 		
 	}

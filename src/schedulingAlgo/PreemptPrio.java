@@ -18,7 +18,7 @@ public class PreemptPrio extends SchedulingAlgorithm{
 		ArrayList<Process> temp1 = new ArrayList<Process>();
 		
 		for(int i = 0; i < processes.length - 1; i++){
-			System.out.println("Process Arrival "+ processes[i].getProcessID());
+			//System.out.println("Process Arrival "+ processes[i].getProcessID());
 			temp1.add(processes[i]);
 			
 			totalBurst += processes[i].getBurstTime();
@@ -29,11 +29,11 @@ public class PreemptPrio extends SchedulingAlgorithm{
 			totalBurst = processes[processes.length - 1].getArrivalTime() + processes[processes.length - 1].getBurstTime();
 		}
 		else{
-			System.out.println("I came here");
+			//System.out.println("I came here");
 			totalBurst += processes[processes.length - 1].getBurstTime();
 		}
 	
-		System.out.println("Total Burst "+ totalBurst);
+		//System.out.println("Total Burst "+ totalBurst);
 		
 		for(int k = processes[0].getArrivalTime(); k < totalBurst; k++){
 			
@@ -70,9 +70,9 @@ public class PreemptPrio extends SchedulingAlgorithm{
 		}
 		
 		for(int i = 0; i < processQueue.size(); i++){
-			System.out.println("Process "+ processQueue.get(i).getProcessID());
+			//System.out.println("Process "+ processQueue.get(i).getProcessID());
 		}
-		System.out.println(processQueue.size());
+		//System.out.println(processQueue.size());
 	}
 	
 	public static void main(String[] args){

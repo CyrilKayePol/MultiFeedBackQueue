@@ -70,7 +70,7 @@ public class MLFQ extends SchedulingAlgorithm{
 		for(int a = 0;a < p.length; a++) {
 			if(p[a].getArrivalTime() == currentBurstTime) {
 				q1.add(p[a]);
-				System.out.println("ADDED "+p[a].getProcessID());
+				//System.out.println("ADDED "+p[a].getProcessID());
 				
 			}
 			
@@ -82,26 +82,26 @@ public class MLFQ extends SchedulingAlgorithm{
 	private void q1execute() {
 		q1 = srtfORpreemptivePrio(q1, HIGHLEVEL, false);
 		q2.addAll(preempted);
-		System.out.println("======");
+		//System.out.println("======");
 		
 	}
 	
 	private void q2execute() {
 		q2 = srtfORpreemptivePrio(q2, LOWLEVEL, false);
 		q3.addAll(preempted);
-		System.out.println("+++++++");
+		//System.out.println("+++++++");
 	}
 	
 	private void q3execute() {
 		q3 = sjfORnonPreemptivePrio(q3, LOWLEVEL, false);
 		q4.addAll(preempted);
-		System.out.println("*******");
+		//System.out.println("*******");
 	}
 	
 	private void q4execute() {
 		q4 = sjfORnonPreemptivePrio(q4, LOWLEVEL, false);
 		q5.addAll(preempted);
-		System.out.println("///////");
+		//System.out.println("///////");
 	}
 	
 	public ArrayList<Process> fcfs(ArrayList<Process> arrivalQueue, int level) {
@@ -111,7 +111,7 @@ public class MLFQ extends SchedulingAlgorithm{
 			arrivalQueue.remove(proc);
 
 			int length = proc.getBurstTime();
-			System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
 			for(int a = 0;a<length;a++) {
 				currentBurstTime +=1;
 				proc.setBurstTime(1);
@@ -119,12 +119,12 @@ public class MLFQ extends SchedulingAlgorithm{
 				entry();
 				if((!q1.isEmpty()) && level == LOWLEVEL && a == length-1) {
 					
-					System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
+					//System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
 					return arrivalQueue;
 				}
 			}
 			
-			System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
 		}
 		return arrivalQueue;
 		
@@ -139,7 +139,7 @@ public class MLFQ extends SchedulingAlgorithm{
 			arrivalQueue.remove(proc);
 
 			int length = proc.getBurstTime();
-			System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
 			for(int a = 0;a<length;a++) {
 				currentBurstTime +=1;
 				proc.setBurstTime(1);
@@ -147,12 +147,12 @@ public class MLFQ extends SchedulingAlgorithm{
 				entry();
 				if((!q1.isEmpty()) && level == LOWLEVEL && a == length-1) {
 					
-					System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
+					//System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
 					return arrivalQueue;
 				}
 			}
 			
-			System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
 		}
 		return arrivalQueue;
 		
@@ -166,7 +166,7 @@ public class MLFQ extends SchedulingAlgorithm{
 			proc = arrivalQueue.get(0);
 			
 			int length = proc.getBurstTime();
-			System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
 			for(int a = 0;a<length;a++) {
 				if(continueExecution) {
 					currentBurstTime +=1;
@@ -174,7 +174,7 @@ public class MLFQ extends SchedulingAlgorithm{
 					updateProcess(proc);
 					entry();
 					if((!q1.isEmpty()) && level == LOWLEVEL) {
-						System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
+						//System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
 						proc.setPreemtedCount(1);
 						updateProcess(proc);
 						q1.add(proc);
@@ -192,12 +192,12 @@ public class MLFQ extends SchedulingAlgorithm{
 					updateProcess(proc);
 					preempted.add(proc);
 					arrivalQueue.remove(proc);
-					System.out.println("[preempted "+proc.getProcessID()+" at time "+currentBurstTime+" remaining = "+proc.getBurstTime());
+					//System.out.println("[preempted "+proc.getProcessID()+" at time "+currentBurstTime+" remaining = "+proc.getBurstTime());
 					break;
 				}
 			}
 			
-			System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
 		}
 		return arrivalQueue;
 	}

@@ -86,7 +86,7 @@ public class GanttChart extends JPanel implements Runnable{
 				try{
 					Thread.sleep(600);
 				}catch(Exception e){
-					System.out.println("At run");
+					//System.out.println("At run");
 					System.err.println(e.getMessage());
 				}
 				if(i == processLabels.length-1){

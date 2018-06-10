@@ -25,11 +25,11 @@ public class FCFS extends SchedulingAlgorithm{
 	}
 	public void printGant() {
 		for(int a = 0;a<gantProcess.size();a++) {
-			System.out.print(gantProcess.get(a));
+			//System.out.print(gantProcess.get(a));
 		}
-		System.out.println();
+		//System.out.println();
 		for(int b = 0;b<gantLine.size();b++) {
-			System.out.print(gantLine.get(b));
+			//System.out.print(gantLine.get(b));
 		}
 	}
 	

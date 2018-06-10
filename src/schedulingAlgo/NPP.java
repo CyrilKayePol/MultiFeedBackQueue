@@ -92,7 +92,7 @@ public class NPP extends SchedulingAlgorithm {
 			int length = proc.getBurstTime();
 			bursts[count] = length;
 			count += 1;
-			System.out.println("P"+proc.getProcessID()+ " start = "+burstTimeTotal);
+			//System.out.println("P"+proc.getProcessID()+ " start = "+burstTimeTotal);
 			for(int a = 0;a<length;a++) {
 				burstTimeTotal +=1;
 				proc.setBurstTime(1);
@@ -100,7 +100,7 @@ public class NPP extends SchedulingAlgorithm {
 				addNewlyArrivedProcess(burstTimeTotal);
 				gantLine.add("-");
 			}
-			System.out.println("P"+proc.getProcessID()+ " end = "+burstTimeTotal);
+			//System.out.println("P"+proc.getProcessID()+ " end = "+burstTimeTotal);
 			
 		}
 		gantLine.add(burstTimeTotal+"");
@@ -112,18 +112,18 @@ public class NPP extends SchedulingAlgorithm {
 	}
 	public void printGant() {
 		for(int a = 0;a<gantProcess.size();a++) {
-			System.out.print(gantProcess.get(a).getProcessID());
+			//System.out.print(gantProcess.get(a).getProcessID());
 		}
-		System.out.println();
+		//System.out.println();
 		for(int b = 0;b<gantLine.size();b++) {
-			System.out.print(gantLine.get(b));
+			//System.out.print(gantLine.get(b));
 		}
 	}
 	
 	public void printExecutionHistory() {
-		System.out.println();
+		//System.out.println();
 		for(int a = 0;a<process.length;a++) {
-			System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
+			//System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
 		}
 	}
 	

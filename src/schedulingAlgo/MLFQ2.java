@@ -148,7 +148,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			q2.addAll(preempted);
 			preempted = new ArrayList<Process>();
 		}
-		System.out.println("+++++++");
+		//System.out.println("+++++++");
 	}
 	
 	private void q3execute(String algoName) {
@@ -156,7 +156,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			q3 = fcfs(q3, 3);
 		}
 		else if(algoName == "SRTF"){
-			System.out.println("I came at q3 SRTF");
+			//System.out.println("I came at q3 SRTF");
 			q3 = srtfORpreemptivePrio(q3, 3, false);
 		}
 		else if(algoName == "Preemptive Priority"){
@@ -176,11 +176,11 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			q4.addAll(preempted);
 		}
 		else{
-			System.out.println("I came at q3 preempted");
+			//System.out.println("I came at q3 preempted");
 			q3.addAll(preempted);
 			preempted = new ArrayList<Process>();
 		}
-		System.out.println("*******");
+		//System.out.println("*******");
 	}
 	
 	private void q4execute(String algoName) {
@@ -209,7 +209,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			q4.addAll(preempted);
 			preempted = new ArrayList<Process>();
 		}
-		System.out.println("///////");
+	//	System.out.println("///////");
 	}
 	private void q5execute(String algoName) {
 		if(algoName == "FCFS"){
@@ -232,7 +232,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 		}
 		q5.addAll(preempted);
 		preempted = new ArrayList<Process>();
-		System.out.println("***********");
+		//System.out.println("***********");
 	}
 	
 	public ArrayList<Process> fcfs(ArrayList<Process> arrivalQueue, int level) {
@@ -242,7 +242,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			arrivalQueue.remove(proc);
 
 			int length = proc.getBurstTime();
-			System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
 			for(int a = 0;a<length;a++) {
 				currentBurstTime +=1;
 				proc.setBurstTime(1);
@@ -252,12 +252,12 @@ public class MLFQ2 extends SchedulingAlgorithm{
 				entry();
 				if((!q1.isEmpty()) && level > 1 && a == length-1) {
 					
-					System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
+					//System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
 					return arrivalQueue;
 				}
 			}
 			
-			System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
 		}
 		return arrivalQueue;
 		
@@ -272,7 +272,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			arrivalQueue.remove(proc);
 
 			int length = proc.getBurstTime();
-			System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " start = "+currentBurstTime);
 			for(int a = 0;a<length;a++) {
 				currentBurstTime +=1;
 				proc.setBurstTime(1);
@@ -282,12 +282,12 @@ public class MLFQ2 extends SchedulingAlgorithm{
 				entry();
 				if((!q1.isEmpty()) && level > 1 && a == length-1) {
 					
-					System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
+					//System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
 					return arrivalQueue;
 				}
 			}
 			
-			System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
+			//System.out.println("P"+proc.getProcessID()+ " end = "+currentBurstTime);
 		}
 		return arrivalQueue;
 		
@@ -297,7 +297,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 		Process proc = null;
 		sortArrivalQueue(proc, arrivalQueue, isPP);
 		for(int i = 0 ; i < arrivalQueue.size(); i++)
-			System.out.println("P "+arrivalQueue.get(i).getProcessID());
+			//System.out.println("P "+arrivalQueue.get(i).getProcessID());
 		while(!arrivalQueue.isEmpty()) {
 			continueExecution = true;
 			proc = arrivalQueue.get(0);
@@ -305,7 +305,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			
 			if(length == 0){
 				arrivalQueue.remove(proc);
-				System.out.println("I came at 0 length");
+				//System.out.println("I came at 0 length");
 			}
 		
 			for(int a = 0;a<length;a++) {
@@ -317,7 +317,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 					updateProcess(proc);
 					entry();
 					if((!q1.isEmpty()) && level > 1) {
-						System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
+						//System.out.println("::P"+proc.getProcessID()+ " end = "+currentBurstTime);
 						proc.setPreemtedCount(1);
 						updateProcess(proc);
 						q1.add(proc);
@@ -334,7 +334,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 				}else {
 					proc.setPreemtedCount(1);
 					updateProcess(proc);
-					System.out.println("[preempted "+proc.getProcessID()+" at time "+currentBurstTime+" remaining = "+proc.getBurstTime());
+					//System.out.println("[preempted "+proc.getProcessID()+" at time "+currentBurstTime+" remaining = "+proc.getBurstTime());
 					break;
 				}
 			}
@@ -434,10 +434,9 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			}
 			arrivalQueue.remove(proc);
 		}
-		System.out.println("Preempted "+ preempted.size());
+		//System.out.println("Preempted "+ preempted.size());
 		
-		for(int i = 0; i < preempted.size(); i++)
-			System.out.println("P "+preempted.get(i).getProcessID() + ": "+preempted.get(i).getBurstTime());
+		
 		return arrivalQueue;
 	}
 	/*public static void main(String[] args) {
@@ -480,7 +479,7 @@ public class MLFQ2 extends SchedulingAlgorithm{
 			}
 		}
 		for(int i = 0; i < processes.length; i++){
-			System.out.println("RT "+ processes[i].getResponseTime() + "P"+processes[i].getProcessID());
+			//System.out.println("RT "+ processes[i].getResponseTime() + "P"+processes[i].getProcessID());
 		}
 	}
 	

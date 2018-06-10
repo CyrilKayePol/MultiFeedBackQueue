@@ -94,7 +94,7 @@ public class PP extends SchedulingAlgorithm {
 			gantProcess.add(proc);
 			gantLine.add(burstTimeTotal+"");
 			int length = proc.getBurstTime();
-			System.out.println("P"+proc.getProcessID()+ " start = "+burstTimeTotal);
+			//System.out.println("P"+proc.getProcessID()+ " start = "+burstTimeTotal);
 			for(int a = 0;a<length;a++) {
 				if(continueExecution) {
 					burstTimeTotal +=1;
@@ -109,11 +109,11 @@ public class PP extends SchedulingAlgorithm {
 						arrivalQueue.remove(proc);
 					}
 				}else {
-					System.out.println("::P"+proc.getProcessID()+ " end = "+burstTimeTotal);
+					//System.out.println("::P"+proc.getProcessID()+ " end = "+burstTimeTotal);
 					break;
 				}
 			}
-			System.out.println("P"+proc.getProcessID()+ " end = "+burstTimeTotal);
+			//System.out.println("P"+proc.getProcessID()+ " end = "+burstTimeTotal);
 		}
 		gantLine.add(burstTimeTotal+"");
 		return gantProcess;
@@ -124,18 +124,18 @@ public class PP extends SchedulingAlgorithm {
 	}
 	public void printGant() {
 		for(int a = 0;a<gantProcess.size();a++) {
-			System.out.print(gantProcess.get(a).getProcessID() + " ");
+			//System.out.print(gantProcess.get(a).getProcessID() + " ");
 		}
-		System.out.println();
+		//System.out.println();
 		for(int b = 0;b<gantLine.size();b++) {
-			System.out.print(gantLine.get(b));
+			//System.out.print(gantLine.get(b));
 		}
 	}
 	
 	public void printExecutionHistory() {
-		System.out.println();
+		//System.out.println();
 		for(int a = 0;a<process.length;a++) {
-			System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
+			//System.out.println("P"+process[a].getProcessID()+" :"+process[a].getPreemptedCount());
 		}
 	}
 	public static void main(String[] args) {

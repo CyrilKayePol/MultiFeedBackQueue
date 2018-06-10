@@ -389,7 +389,7 @@ public class MainPanel extends JPanel implements ActionListener{
 					//System.out.println("At inner try: Wrong input");
 					start.setEnabled(true);
 					flag = false;
-					JOptionPane.showMessageDialog(this, "Please check your entries. There might be incorrect inputs or you missed out a field.");
+					JOptionPane.showMessageDialog(this, "Please check your entries. There might be neccessary fields left blank or incorrect inputs.");
 				}
 		    }
 		    

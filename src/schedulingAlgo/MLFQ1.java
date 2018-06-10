@@ -20,7 +20,7 @@ public class MLFQ1 extends SchedulingAlgorithm{
 		processExec = new ArrayList<String>();
 	}
 	public ArrayList<String> execute(){
-		System.out.println("I came at execute");
+		//System.out.println("I came at execute");
 		for(int i = 0; i < queueAlgo.length; i++){
 			if(queueAlgo[i] == "FCFS"){
 				executeFCFS(i);
@@ -32,15 +32,15 @@ public class MLFQ1 extends SchedulingAlgorithm{
 				executeSRTF(i);
 			}
 			else if(queueAlgo[i] == "Non-Preemptive Priority"){
-				System.out.println("Non-Preemptive");
+				//System.out.println("Non-Preemptive");
 				executeNoPreemptPrio(i);
 			}
 			else if(queueAlgo[i] == "Preemptive Priority"){
-				System.out.println("Preemptive");
+				//System.out.println("Preemptive");
 				executePreemptPrio(i);
 			}
 			else if(queueAlgo[i] == "Round Robin"){
-				System.out.println("RoundRobin");
+				//System.out.println("RoundRobin");
 				executeRR(i, timeQuantum[i]);
 			}
 			else{
@@ -58,7 +58,7 @@ public class MLFQ1 extends SchedulingAlgorithm{
 		if(queueLevel ==0){
 			FCFS fcfs = new FCFS(processes);
 			processQueue = fcfs.execution();
-			System.out.println(processQueue.size());
+			//System.out.println(processQueue.size());
 			
 			for(int i = 0; i < processQueue.size(); i++){
 				for(int j = 0; j < processes.length; j++){
@@ -147,7 +147,7 @@ public class MLFQ1 extends SchedulingAlgorithm{
 			SJF sjf = new SJF(processes);
 			sjf.seedArrivalQueue();
 			processQueue = sjf.execute();
-			System.out.println("PQ "+processQueue.size());
+			//System.out.println("PQ "+processQueue.size());
 			
 			for(int i = 0; i < processQueue.size(); i++){
 				for(int j = 0; j < processes.length; j++){
@@ -370,7 +370,7 @@ public class MLFQ1 extends SchedulingAlgorithm{
 			srtf.seedArrivalQueue();
 			processQueue = srtf.execute();
 			processExec = srtf.processExecution();
-			System.out.println("PQ "+processQueue.size());
+			//System.out.println("PQ "+processQueue.size());
 		}
 		else{
 			for(int i = 0; i < processQueue.size(); i++){
@@ -395,16 +395,16 @@ public class MLFQ1 extends SchedulingAlgorithm{
 		printProcess();
 	}
 	public void printProcess(){
-		System.out.println("------> Executed! "+processExec.size());
+		//System.out.println("------> Executed! "+processExec.size());
 		for(int i = 0; i < processExec.size(); i++){
-			System.out.println("E-Process: "+processExec.get(i));
+			//System.out.println("E-Process: "+processExec.get(i));
 		}
 	}
 	public void executeNoPreemptPrio(int queueLevel){
 		if(queueLevel == 0){
 			NoPreemptPrio prio = new NoPreemptPrio(processes);
 			processQueue = prio.execute();
-			System.out.println("PQ "+processQueue.size());
+			//System.out.println("PQ "+processQueue.size());
 			for(int i = 0; i < processQueue.size(); i++){
 				int burst = processQueue.get(i).getBurstTime();
 				for(int j = 0; j < burst; j++){
