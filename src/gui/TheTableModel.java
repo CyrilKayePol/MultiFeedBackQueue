@@ -21,6 +21,7 @@ public class TheTableModel extends DefaultTableModel implements TableModelListen
         	return false;
         else if (col == 2){
         	if(myTable == "queueTable" && getValueAt(row, 1) == "Round Robin"){
+        		this.setValueAt(3, row,2);
         		return true;
         	}
         	else{

@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -57,6 +58,7 @@ public class MainPanel extends JPanel implements ActionListener{
 	private JScrollPane queuePane, jobPane;
 	private GanttChart threadedGanttChart;
 	private JScrollPane ganttChartPane, readyQueuePane;
+	private boolean flag = true;
 	
 	public MainPanel(){
 		setSize(1366, 730);
@@ -280,6 +282,7 @@ public class MainPanel extends JPanel implements ActionListener{
 		
 		}
 		else if (obj == populate){
+			flag = true;
 			String numJob = numJobsfield.getText();
 			numberQueue = (Integer) numQLevelfield.getSelectedItem();
 			
@@ -299,18 +302,22 @@ public class MainPanel extends JPanel implements ActionListener{
 				jobPoolPanel.revalidate();
 			}
 			catch(Exception e){
-				System.err.println(e.getMessage());
+				//System.err.println(e.getMessage());
+				//System.out.println("Number of Jobs field is empty. Please enter a number.");
+				JOptionPane.showMessageDialog(this, "Please enter correct number of jobs.");
 			}
 		}
 		else if (obj == start){
+			flag = true;
 			start.setEnabled(false);
 			MainPanel.averageWaitfield.setText("");
 			MainPanel.averageTRfield.setText("");
 			MainPanel.averageResponsefield.setText("");
-			
+			//System.out.println(flag);
 			startAction();
 		}
 		else if(obj == numQLevelfield){
+			//System.out.println("hi kaye");
 			numberQueue = (Integer)numQLevelfield.getSelectedItem();
 			
 			queuePanel.removeAll();
@@ -332,7 +339,8 @@ public class MainPanel extends JPanel implements ActionListener{
 			String[] algo = new String[numberQueue];
 			int[] quantum = new int[numberQueue];
 			
-		    while(true){
+		    while(true && flag){
+		    	//System.out.println("in here");
 		    	try{
 					processes = new Process[numberJobs];
 					for(int i = 0; i < numberJobs; i++){
@@ -378,56 +386,60 @@ public class MainPanel extends JPanel implements ActionListener{
 					break;
 				}
 				catch(Exception e){
-					System.out.println("At inner try: Wrong input");
+					//System.out.println("At inner try: Wrong input");
 					start.setEnabled(true);
-					throw e;
+					flag = false;
+					JOptionPane.showMessageDialog(this, "Please check your entries. There might be incorrect inputs or you missed out a field.");
 				}
 		    }
-		    setEnabledAll(dataPanel, false);
-			mlfq = new MLFQ2(processes, algo, quantum);
+		    
+		    if(flag) {
+			    setEnabledAll(dataPanel, false);
+				mlfq = new MLFQ2(processes, algo, quantum);
+				
+				ganttChartPanel.removeAll();
+				threadedGanttChart = new GanttChart(mlfq.execute());
+				mlfq.computeTurnAroundTime();
+				mlfq.computeResponseTime();
+				
+				double w = 0, tr =0, rt = 0;
+				for(int i = 0; i < processes.length; i++){
+					tr += processes[i].getTurnAroundTime();
+					w+= processes[i].getWaitingTime();
+					rt += processes[i].getResponseTime();
+				}
+				
+				avgTurnAroundTime = tr / processes.length;
+				avgWaitingTime = w/processes.length;
+				avgResponseTime = rt/processes.length;
+				
+				
+				//System.out.println("Turn: "+ avgTurnAroundTime + "Wait: "+avgWaitingTime + "Response: " +avgResponseTime);
+				ganttChartPane = new JScrollPane(threadedGanttChart);
+				ganttChartPane.setBounds(15, 55, 1310, 100);
+				addGanttChartPanelComponents();
+				
+				threadedGanttChart.repaint();
+				threadedGanttChart.revalidate();
+				
+				ganttChartPanel.repaint();
+				ganttChartPanel.revalidate();
+				
+				Thread thread = new Thread(threadedGanttChart);
+				thread.start();
 			
-			ganttChartPanel.removeAll();
-			threadedGanttChart = new GanttChart(mlfq.execute());
-			mlfq.computeTurnAroundTime();
-			mlfq.computeResponseTime();
-			
-			double w = 0, tr =0, rt = 0;
-			for(int i = 0; i < processes.length; i++){
-				tr += processes[i].getTurnAroundTime();
-				w+= processes[i].getWaitingTime();
-				rt += processes[i].getResponseTime();
-			}
-			
-			avgTurnAroundTime = tr / processes.length;
-			avgWaitingTime = w/processes.length;
-			avgResponseTime = rt/processes.length;
-			
-			
-			System.out.println("Turn: "+ avgTurnAroundTime + "Wait: "+avgWaitingTime + "Response: " +avgResponseTime);
-			ganttChartPane = new JScrollPane(threadedGanttChart);
-			ganttChartPane.setBounds(15, 55, 1310, 100);
-			addGanttChartPanelComponents();
-			
-			threadedGanttChart.repaint();
-			threadedGanttChart.revalidate();
-			
-			ganttChartPanel.repaint();
-			ganttChartPanel.revalidate();
-			
-			Thread thread = new Thread(threadedGanttChart);
-			thread.start();
-		
-			readyQueuePanel.removeAll();
-			readyQueuePanel.add(readyQueue);
-			readyQueuePane = new JScrollPane(threadedGanttChart.getThreadedReadyQueue());
-			readyQueuePane.setBounds(15, 55, 895, 100);
-			readyQueuePanel.add(readyQueuePane);
-			
-			readyQueuePanel.repaint();
-			readyQueuePanel.revalidate();
+				readyQueuePanel.removeAll();
+				readyQueuePanel.add(readyQueue);
+				readyQueuePane = new JScrollPane(threadedGanttChart.getThreadedReadyQueue());
+				readyQueuePane.setBounds(15, 55, 895, 100);
+				readyQueuePanel.add(readyQueuePane);
+				
+				readyQueuePanel.repaint();
+				readyQueuePanel.revalidate();
+		    }
 		}
 		catch(Exception e){
-			System.out.print("At MainPanel");
+			//System.out.print("At MainPanel");
 			e.printStackTrace();
 		}
 	}
