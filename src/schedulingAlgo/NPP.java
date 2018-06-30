@@ -92,7 +92,6 @@ public class NPP extends SchedulingAlgorithm {
 			int length = proc.getBurstTime();
 			bursts[count] = length;
 			count += 1;
-			//System.out.println("P"+proc.getProcessID()+ " start = "+burstTimeTotal);
 			for(int a = 0;a<length;a++) {
 				burstTimeTotal +=1;
 				proc.setBurstTime(1);
@@ -100,7 +99,6 @@ public class NPP extends SchedulingAlgorithm {
 				addNewlyArrivedProcess(burstTimeTotal);
 				gantLine.add("-");
 			}
-			//System.out.println("P"+proc.getProcessID()+ " end = "+burstTimeTotal);
 			
 		}
 		gantLine.add(burstTimeTotal+"");

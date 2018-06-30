@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import schedulingAlgo.MLFQ2;
+import schedulingAlgo.MLFQ;
 import schedulingAlgo.Process;
 
 public class MainPanel extends JPanel implements ActionListener{
@@ -40,7 +40,7 @@ public class MainPanel extends JPanel implements ActionListener{
 	private Object[][] obj1;
 	private Process[] processes;
 	private int numberJobs, numberQueue = 3;
-	private MLFQ2 mlfq;
+	private MLFQ mlfq;
 	
 	private JPanel  jobPoolPanel, readyQueuePanel, 
 		averagePanel, ganttChartPanel, queuePanel;
@@ -96,7 +96,6 @@ public class MainPanel extends JPanel implements ActionListener{
 		ganttChartPanel = new JPanel();
 		ganttChartPanel.setBounds(3, 468, 1340, 196);
 		ganttChartPanel.setBackground(Color.LIGHT_GRAY);
-		ganttChartPanel.setLayout(null);
 		
 		queuePanel = new JPanel();
 		queuePanel.setBounds(15, 102, 640, 140);
@@ -302,8 +301,6 @@ public class MainPanel extends JPanel implements ActionListener{
 				jobPoolPanel.revalidate();
 			}
 			catch(Exception e){
-				//System.err.println(e.getMessage());
-				//System.out.println("Number of Jobs field is empty. Please enter a number.");
 				JOptionPane.showMessageDialog(this, "Please enter correct number of jobs.");
 			}
 		}
@@ -313,11 +310,10 @@ public class MainPanel extends JPanel implements ActionListener{
 			MainPanel.averageWaitfield.setText("");
 			MainPanel.averageTRfield.setText("");
 			MainPanel.averageResponsefield.setText("");
-			//System.out.println(flag);
+			
 			startAction();
 		}
 		else if(obj == numQLevelfield){
-			//System.out.println("hi kaye");
 			numberQueue = (Integer)numQLevelfield.getSelectedItem();
 			
 			queuePanel.removeAll();
@@ -340,7 +336,6 @@ public class MainPanel extends JPanel implements ActionListener{
 			int[] quantum = new int[numberQueue];
 			
 		    while(true && flag){
-		    	//System.out.println("in here");
 		    	try{
 					processes = new Process[numberJobs];
 					for(int i = 0; i < numberJobs; i++){
@@ -386,7 +381,6 @@ public class MainPanel extends JPanel implements ActionListener{
 					break;
 				}
 				catch(Exception e){
-					//System.out.println("At inner try: Wrong input");
 					start.setEnabled(true);
 					flag = false;
 					JOptionPane.showMessageDialog(this, "Please check your entries. There might be neccessary fields left blank or incorrect inputs.");
@@ -395,7 +389,7 @@ public class MainPanel extends JPanel implements ActionListener{
 		    
 		    if(flag) {
 			    setEnabledAll(dataPanel, false);
-				mlfq = new MLFQ2(processes, algo, quantum);
+				mlfq = new MLFQ(processes, algo, quantum);
 				
 				ganttChartPanel.removeAll();
 				threadedGanttChart = new GanttChart(mlfq.execute());
@@ -413,8 +407,6 @@ public class MainPanel extends JPanel implements ActionListener{
 				avgWaitingTime = w/processes.length;
 				avgResponseTime = rt/processes.length;
 				
-				
-				//System.out.println("Turn: "+ avgTurnAroundTime + "Wait: "+avgWaitingTime + "Response: " +avgResponseTime);
 				ganttChartPane = new JScrollPane(threadedGanttChart);
 				ganttChartPane.setBounds(15, 55, 1310, 100);
 				addGanttChartPanelComponents();
@@ -439,7 +431,6 @@ public class MainPanel extends JPanel implements ActionListener{
 		    }
 		}
 		catch(Exception e){
-			//System.out.print("At MainPanel");
 			e.printStackTrace();
 		}
 	}
