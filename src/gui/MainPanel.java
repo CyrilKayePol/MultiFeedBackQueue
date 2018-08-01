@@ -96,6 +96,7 @@ public class MainPanel extends JPanel implements ActionListener{
 		ganttChartPanel = new JPanel();
 		ganttChartPanel.setBounds(3, 468, 1340, 196);
 		ganttChartPanel.setBackground(Color.LIGHT_GRAY);
+		ganttChartPanel.setLayout(null);
 		
 		queuePanel = new JPanel();
 		queuePanel.setBounds(15, 102, 640, 140);
